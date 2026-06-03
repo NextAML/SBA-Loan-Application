@@ -8,25 +8,134 @@
 -->
             
 <!DOCTYPE html>
+<!--
+  DOCTYPE tells the browser this is a modern HTML5 page.
+  Without this line, some browsers render the page in an old
+  compatibility mode and the layout may break.
+-->
+
 <html lang="en">
+<!--
+  lang="en" tells the browser and screen readers this page is in English.
+  This helps with accessibility and search engine indexing.
+-->
+
+
 <head>
+<!--
+  <head> contains page settings that the user does NOT see on screen.
+  Everything here is instructions for the browser, not visible content.
+-->
+  
   <meta charset="UTF-8" />
+    <!--
+    charset="UTF-8" sets the character encoding.
+    This allows the page to correctly display English, symbols, and special
+    characters like $ % & without them turning into garbled text.
+  -->
+
+
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!--
+    viewport makes the page scale correctly on phones and tablets.
+    Without this, mobile browsers would zoom out and show a tiny desktop view.
+    width=device-width  = use the screen width of the device
+    initial-scale=1.0   = do not zoom in or out on load
+  -->
+
+  
   <title>SBA Loan Application Demo</title>
+    <!--
+    <title> sets the text shown in the browser tab at the top of the window.
+    This is also what appears when you bookmark the page or share the link.
+  -->
+  
   <link rel="stylesheet" href="css/styles.css" />
+    <!--
+    <link> loads the external CSS stylesheet into this page.
+    rel="stylesheet"      = tells the browser this is a styling file
+    href="css/styles.css" = the file path: look inside the css/ folder
+                            for a file called styles.css
+ 
+    Without this line, the page loads with zero styling —
+    no colors, no layout, no card shapes, just plain text.
+  -->
+  
 </head>
+  
 <body>
-  <!-- Page title area shown above the application workspace. -->
+<!--
+  <body> contains everything the user actually SEES on the page.
+  All visible content — header, nav, sections, buttons — goes here.
+-->
+ 
+ 
+  <!-- ============================================================
+       HEADER
+       The dark blue gradient banner at the very top of the page.
+       Displays the app name and a short description.
+ 
+       HOW IT LOOKS:
+         Styled in styles.css under the "header" selector.
+         Deep navy blue on the left fading to bright blue on the right.
+         White text for the heading, light blue text for the subtitle.
+ 
+       CONTENT:
+         <h1> = main app title (large bold text)
+         <p>  = short subtitle describing what the app does
+  ============================================================= -->
+
+  
   <header>
     <h1>SBA Loan Application Demo</h1>
     <p>Bank-style loan intake, compliance screening, document checklist, and underwriting summary.</p>
   </header>
+  <!-- ============================================================
+       MAIN LAYOUT CONTAINER — class="container"
+       This <div> wraps the entire app workspace below the header.
+       It uses CSS Grid (defined in styles.css) to create a
+       2-column side-by-side layout:
+ 
+         LEFT  column → 260px fixed width  = <nav> sidebar
+         RIGHT column → remaining space    = <main> content panels
+ 
+       Without this container, the nav and content would stack
+       vertically instead of sitting side by side.
+  ============================================================= -->
 
-  <!-- Two-column app shell: left navigation and right content panels. -->
+  
   <div class="container">
-    <!-- Sidebar navigation. Each button calls showSection() to reveal one panel. -->
+    <!-- ==========================================================
+         LEFT SIDEBAR — NAVIGATION  <nav>
+         A vertical list of 8 buttons, one per section of the app.
+         Sits on the left side inside .container.
+ 
+         HOW NAVIGATION WORKS:
+           Each button has an onclick attribute that calls
+           showSection() from js/app.js when clicked.
+ 
+           Example:
+             onclick="showSection('dashboard', this)"
+               'dashboard' = the id of the <section> to show
+               this        = the button element itself, passed so
+                             app.js can apply the blue highlight
+ 
+         ACTIVE STATE:
+           class="active" on the first button means Dashboard
+           is highlighted when the page first loads.
+           app.js removes and re-adds this class on every click.
+ 
+         STYLING:
+           Defined in styles.css under the "nav" and "nav button"
+           selectors. White card with rounded corners, sticky so
+           it stays visible as the user scrolls down.
+    =========================================================== -->
+
+    
     <nav>
+      <!-- Dashboard button — active by default on page load -->
       <button class="active" onclick="showSection('dashboard', this)">Dashboard</button>
+      <!-- Each button below is hidden (no active class) on load -->
       <button onclick="showSection('borrower', this)">Borrower Info</button>
       <button onclick="showSection('business', this)">Business Info</button>
       <button onclick="showSection('loan', this)">Loan Request</button>
@@ -36,77 +145,631 @@
       <button onclick="showSection('underwriting', this)">Generate Credit Memo</button>
     </nav>
 
+
+    
+    <!-- ==========================================================
+         RIGHT CONTENT AREA — <main>
+         Contains all 8 sections of the app stacked inside.
+         Only ONE section is visible at any time.
+         The other 7 have class="hidden" = display:none in styles.css.
+ 
+         app.js showSection() controls which one is visible by:
+           1. Adding class="hidden" to ALL 8 sections
+           2. Removing class="hidden" from the target section only
+    =========================================================== -->
     <main>
-      <!-- Dashboard: high-level application status and live score summary. -->
+
+      <!-- --------------------------------------------------------
+           SECTION 1: DASHBOARD — id="dashboard"
+           The first thing the user sees when the page loads.
+           No class="hidden" here because this is the default view.
+ 
+           DISPLAYS 4 METRIC CARDS in a 2-column grid:
+             Card 1 — Application status  (static text, never changes)
+             Card 2 — Risk score number + progress bar
+             Card 3 — Loan program name
+             Card 4 — Requested loan amount
+ 
+           LIVE-UPDATE IDs (written to by calculator.js):
+             id="dashScore"   → score number, e.g. "90 / 100"
+                                updated by calculateScore()
+             id="scoreBar"    → progress bar fill width, e.g. 90%
+                                updated by calculateScore()
+             id="dashProgram" → loan program name, e.g. "SBA 7(a)"
+                                updated by generateCreditMemo()
+             id="dashAmount"  → formatted dollar amount, e.g. "$250,000"
+                                updated by generateCreditMemo()
+ 
+           PILLS:
+             The 4 blue badge tags at the bottom show the main
+             compliance workstreams. These are static in this demo.
+             In a real app they would reflect live screening results.
+      --------------------------------------------------------- -->
+      
       <section id="dashboard" class="card">
         <h2>Application Dashboard</h2>
-        <!-- Metric cards summarize the current stage, risk score, program, and amount. -->
+        <!-- 2-column grid: holds the 4 metric cards side by side -->
         <div class="grid">
+          <!-- Card 1: Status — hardcoded, no JS interaction -->
           <div class="metric"><span>Status</span><strong>In Review</strong><p>Current stage: Pre-underwriting</p></div>
+          <!-- Card 2: Risk Score
+               id="dashScore" — calculator.js overwrites this text
+               id="scoreBar"  — calculator.js sets style="width: X%"
+               The progress bar visually represents the score out of 100 -->
           <div class="metric"><span>Risk Score</span><strong id="dashScore">72 / 100</strong><div class="score"><div id="scoreBar"></div></div></div>
+          <!-- Card 3: Loan Program
+               id="dashProgram" — updated when generateCreditMemo() runs -->
           <div class="metric"><span>Loan Program</span><strong id="dashProgram">SBA 7(a)</strong><p>Selected by applicant</p></div>
+          <!-- Card 4: Requested Amount
+               id="dashAmount" — updated when generateCreditMemo() runs -->
           <div class="metric"><span>Requested Amount</span><strong id="dashAmount">$250,000</strong><p>Use of funds: Working capital</p></div>
-        </div>
-        <!-- Pills call out the major underwriting/compliance workstreams. -->
+        </div> <!-- end .grid -->
+
+        <!-- Compliance status badges — static labels in this demo -->
+        
         <p>
           <span class="pill">KYC Required</span>
           <span class="pill">OFAC Screening</span>
           <span class="pill">Cash Flow Review</span>
           <span class="pill">Document Validation</span>
         </p>
-      </section>
+      </section><!-- end #dashboard -->
 
-      <!-- Borrower panel: owner/contact information used in the credit memo. -->
+      
+
+      <!-- --------------------------------------------------------
+           SECTION 2: BORROWER INFORMATION — id="borrower"
+           class="hidden" = invisible on load, shown when nav is clicked.
+ 
+           Collects personal details about the loan applicant.
+           These fields are READ by generateCreditMemo() in calculator.js
+           to populate the borrower section of the credit memo.
+ 
+           FIELDS WITH IDs (used by calculator.js):
+             id="name"      → borrower full legal name
+             id="email"     → contact email address
+             id="ownership" → ownership percentage in the business
+ 
+           FIELDS WITHOUT IDs (display only, not used in calculations):
+             Phone, Citizenship, Credit Authorization
+      --------------------------------------------------------- -->
       <section id="borrower" class="card hidden">
         <h2>Borrower Information</h2>
         <div class="grid">
+          <!-- id="name" → read by generateCreditMemo() for the memo header -->
           <div><label>Full Legal Name</label><input id="name" value="Syed Asif"></div>
+          <!-- id="email" → read by generateCreditMemo() for the overview table -->
           <div><label>Email</label><input id="email" value="borrower@example.com"></div>
+          <!-- No id — display only, not used in any calculation -->
           <div><label>Phone</label><input value="+1 555 123 4567"></div>
+          <!-- id="ownership" → read by generateCreditMemo() for ownership % -->
           <div><label>Ownership %</label><input id="ownership" type="number" value="100"></div>
+          <!-- Dropdown — display only in this demo -->                
           <div><label>Citizenship / Residency</label><select><option>U.S. Citizen</option><option>Permanent Resident</option><option>Eligible Non-Citizen</option></select></div>
+          <!-- Dropdown — display only in this demo -->
           <div><label>Credit Authorization</label><select><option>Authorized</option><option>Pending</option></select></div>
         </div>
-      </section>
+      </section><!-- end #borrower -->
 
-      <!-- Business panel: company profile and operating history. -->
+
+
+
+
+      <!-- --------------------------------------------------------
+           SECTION 3: BUSINESS INFORMATION — id="business"
+           class="hidden" = invisible on load.
+ 
+           Collects details about the applicant's company.
+ 
+           FIELDS WITH IDs (used by calculator.js):
+             id="bizName"  → company name, appears in memo title and body
+             id="industry" → industry sector, appears in financial analysis
+             id="years"    → years in business
+                             USED IN SCORING: years >= 2 adds +10 points
+                             USED IN MEMO:    appears in analysis paragraph
+ 
+           FIELDS WITHOUT IDs (display only):
+             EIN, Business Type, Employees
+      --------------------------------------------------------- -->
       <section id="business" class="card hidden">
         <h2>Business Information</h2>
         <div class="grid">
+          <!-- id="bizName" → read by generateCreditMemo() -->
           <div><label>Business Name</label><input id="bizName" value="Asif Capital LLC"></div>
+          <!-- No id — display only -->
           <div><label>EIN</label><input value="12-3456789"></div>
+
+          <!-- Dropdown — display only -->
           <div><label>Business Type</label><select><option>LLC</option><option>Corporation</option><option>Sole Proprietor</option><option>Partnership</option></select></div>
+          <!-- id="industry" → read by generateCreditMemo() -->
           <div><label>Industry / NAICS</label><input id="industry" value="Finance / Compliance Technology"></div>
+
+          <!-- id="years" → used by calculateScore() AND generateCreditMemo() -->
           <div><label>Years in Business</label><input id="years" type="number" value="3"></div>
+          <!-- No id — display only -->
           <div><label>Employees</label><input type="number" value="8"></div>
         </div>
-      </section>
+      </section><!-- end #business -->
 
-      <!-- Loan panel: requested SBA product, amount, use of funds, and term. -->
+
+
+      
+      <!-- --------------------------------------------------------
+           SECTION 4: LOAN REQUEST — id="loan"
+           class="hidden" = invisible on load.
+ 
+           Captures the specific loan product being requested.
+ 
+           FIELDS WITH IDs (used by calculator.js):
+             id="program" → SBA loan type (7a, Express, 504, Microloan)
+                            shown on Dashboard card and in memo overview
+             id="amount"  → dollar amount requested
+                            shown on Dashboard card and in memo overview
+             id="funds"   → purpose of the loan (working capital, equipment etc.)
+                            shown in memo terms and executive summary
+ 
+           FIELDS WITHOUT IDs (display only):
+             Requested Term
+      --------------------------------------------------------- -->
       <section id="loan" class="card hidden">
         <h2>Loan Request</h2>
         <div class="grid">
+          <!-- id="program" → generateCreditMemo() reads this and updates #dashProgram -->
           <div><label>SBA Program</label><select id="program"><option>SBA 7(a)</option><option>SBA Express</option><option>SBA 504</option><option>Microloan</option></select></div>
+          <!-- id="amount" → generateCreditMemo() reads this and updates #dashAmount -->
           <div><label>Loan Amount</label><input id="amount" type="number" value="250000"></div>
+          
+
+raw
+Index · HTML
+<!--
+  FILE: index.html
+  FUNCTION: The structure of the entire web page.
+            Defines all 8 sections (Dashboard, Borrower Info, Business Info,
+            Loan Request, Financials, Compliance, Documents, Credit Memo),
+            the navigation sidebar, and all form fields.
+            Loads styles.css for visuals, app.js and calculator.js for logic.
+-->
+ 
+<!DOCTYPE html>
+<!--
+  DOCTYPE tells the browser this is a modern HTML5 page.
+  Without this line, some browsers render the page in an old
+  compatibility mode and the layout may break.
+-->
+ 
+<html lang="en">
+<!--
+  lang="en" tells the browser and screen readers this page is in English.
+  This helps with accessibility and search engine indexing.
+-->
+ 
+<head>
+<!--
+  <head> contains page settings that the user does NOT see on screen.
+  Everything here is instructions for the browser, not visible content.
+-->
+ 
+  <meta charset="UTF-8" />
+  <!--
+    charset="UTF-8" sets the character encoding.
+    This allows the page to correctly display English, symbols, and special
+    characters like $ % & without them turning into garbled text.
+  -->
+ 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!--
+    viewport makes the page scale correctly on phones and tablets.
+    Without this, mobile browsers would zoom out and show a tiny desktop view.
+    width=device-width  = use the screen width of the device
+    initial-scale=1.0   = do not zoom in or out on load
+  -->
+ 
+  <title>SBA Loan Application Demo</title>
+  <!--
+    <title> sets the text shown in the browser tab at the top of the window.
+    This is also what appears when you bookmark the page or share the link.
+  -->
+ 
+  <link rel="stylesheet" href="css/styles.css" />
+  <!--
+    <link> loads the external CSS stylesheet into this page.
+    rel="stylesheet"      = tells the browser this is a styling file
+    href="css/styles.css" = the file path: look inside the css/ folder
+                            for a file called styles.css
+ 
+    Without this line, the page loads with zero styling —
+    no colors, no layout, no card shapes, just plain text.
+  -->
+ 
+</head>
+ 
+<body>
+<!--
+  <body> contains everything the user actually SEES on the page.
+  All visible content — header, nav, sections, buttons — goes here.
+-->
+ 
+ 
+  <!-- ============================================================
+       HEADER
+       The dark blue gradient banner at the very top of the page.
+       Displays the app name and a short description.
+ 
+       HOW IT LOOKS:
+         Styled in styles.css under the "header" selector.
+         Deep navy blue on the left fading to bright blue on the right.
+         White text for the heading, light blue text for the subtitle.
+ 
+       CONTENT:
+         <h1> = main app title (large bold text)
+         <p>  = short subtitle describing what the app does
+  ============================================================= -->
+  <header>
+    <h1>SBA Loan Application Demo</h1>
+    <p>Bank-style loan intake, compliance screening, document checklist, and underwriting summary.</p>
+  </header>
+ 
+ 
+  <!-- ============================================================
+       MAIN LAYOUT CONTAINER — class="container"
+       This <div> wraps the entire app workspace below the header.
+       It uses CSS Grid (defined in styles.css) to create a
+       2-column side-by-side layout:
+ 
+         LEFT  column → 260px fixed width  = <nav> sidebar
+         RIGHT column → remaining space    = <main> content panels
+ 
+       Without this container, the nav and content would stack
+       vertically instead of sitting side by side.
+  ============================================================= -->
+  <div class="container">
+ 
+ 
+    <!-- ==========================================================
+         LEFT SIDEBAR — NAVIGATION  <nav>
+         A vertical list of 8 buttons, one per section of the app.
+         Sits on the left side inside .container.
+ 
+         HOW NAVIGATION WORKS:
+           Each button has an onclick attribute that calls
+           showSection() from js/app.js when clicked.
+ 
+           Example:
+             onclick="showSection('dashboard', this)"
+               'dashboard' = the id of the <section> to show
+               this        = the button element itself, passed so
+                             app.js can apply the blue highlight
+ 
+         ACTIVE STATE:
+           class="active" on the first button means Dashboard
+           is highlighted when the page first loads.
+           app.js removes and re-adds this class on every click.
+ 
+         STYLING:
+           Defined in styles.css under the "nav" and "nav button"
+           selectors. White card with rounded corners, sticky so
+           it stays visible as the user scrolls down.
+    =========================================================== -->
+    <nav>
+      <!-- Dashboard button — active by default on page load -->
+      <button class="active" onclick="showSection('dashboard', this)">Dashboard</button>
+ 
+      <!-- Each button below is hidden (no active class) on load -->
+      <button onclick="showSection('borrower', this)">Borrower Info</button>
+      <button onclick="showSection('business', this)">Business Info</button>
+      <button onclick="showSection('loan', this)">Loan Request</button>
+      <button onclick="showSection('financials', this)">Financials</button>
+      <button onclick="showSection('compliance', this)">Compliance & Risk</button>
+      <button onclick="showSection('documents', this)">Documents</button>
+      <button onclick="showSection('underwriting', this)">Generate Credit Memo</button>
+    </nav>
+ 
+ 
+    <!-- ==========================================================
+         RIGHT CONTENT AREA — <main>
+         Contains all 8 sections of the app stacked inside.
+         Only ONE section is visible at any time.
+         The other 7 have class="hidden" = display:none in styles.css.
+ 
+         app.js showSection() controls which one is visible by:
+           1. Adding class="hidden" to ALL 8 sections
+           2. Removing class="hidden" from the target section only
+    =========================================================== -->
+    <main>
+ 
+ 
+      <!-- --------------------------------------------------------
+           SECTION 1: DASHBOARD — id="dashboard"
+           The first thing the user sees when the page loads.
+           No class="hidden" here because this is the default view.
+ 
+           DISPLAYS 4 METRIC CARDS in a 2-column grid:
+             Card 1 — Application status  (static text, never changes)
+             Card 2 — Risk score number + progress bar
+             Card 3 — Loan program name
+             Card 4 — Requested loan amount
+ 
+           LIVE-UPDATE IDs (written to by calculator.js):
+             id="dashScore"   → score number, e.g. "90 / 100"
+                                updated by calculateScore()
+             id="scoreBar"    → progress bar fill width, e.g. 90%
+                                updated by calculateScore()
+             id="dashProgram" → loan program name, e.g. "SBA 7(a)"
+                                updated by generateCreditMemo()
+             id="dashAmount"  → formatted dollar amount, e.g. "$250,000"
+                                updated by generateCreditMemo()
+ 
+           PILLS:
+             The 4 blue badge tags at the bottom show the main
+             compliance workstreams. These are static in this demo.
+             In a real app they would reflect live screening results.
+      --------------------------------------------------------- -->
+      <section id="dashboard" class="card">
+        <h2>Application Dashboard</h2>
+ 
+        <!-- 2-column grid: holds the 4 metric cards side by side -->
+        <div class="grid">
+ 
+          <!-- Card 1: Status — hardcoded, no JS interaction -->
+          <div class="metric">
+            <span>Status</span>
+            <strong>In Review</strong>
+            <p>Current stage: Pre-underwriting</p>
+          </div>
+ 
+          <!-- Card 2: Risk Score
+               id="dashScore" — calculator.js overwrites this text
+               id="scoreBar"  — calculator.js sets style="width: X%"
+               The progress bar visually represents the score out of 100 -->
+          <div class="metric">
+            <span>Risk Score</span>
+            <strong id="dashScore">72 / 100</strong>
+            <div class="score">
+              <div id="scoreBar"></div>
+            </div>
+          </div>
+ 
+          <!-- Card 3: Loan Program
+               id="dashProgram" — updated when generateCreditMemo() runs -->
+          <div class="metric">
+            <span>Loan Program</span>
+            <strong id="dashProgram">SBA 7(a)</strong>
+            <p>Selected by applicant</p>
+          </div>
+ 
+          <!-- Card 4: Requested Amount
+               id="dashAmount" — updated when generateCreditMemo() runs -->
+          <div class="metric">
+            <span>Requested Amount</span>
+            <strong id="dashAmount">$250,000</strong>
+            <p>Use of funds: Working capital</p>
+          </div>
+ 
+        </div><!-- end .grid -->
+ 
+        <!-- Compliance status badges — static labels in this demo -->
+        <p>
+          <span class="pill">KYC Required</span>
+          <span class="pill">OFAC Screening</span>
+          <span class="pill">Cash Flow Review</span>
+          <span class="pill">Document Validation</span>
+        </p>
+ 
+      </section><!-- end #dashboard -->
+ 
+ 
+      <!-- --------------------------------------------------------
+           SECTION 2: BORROWER INFORMATION — id="borrower"
+           class="hidden" = invisible on load, shown when nav is clicked.
+ 
+           Collects personal details about the loan applicant.
+           These fields are READ by generateCreditMemo() in calculator.js
+           to populate the borrower section of the credit memo.
+ 
+           FIELDS WITH IDs (used by calculator.js):
+             id="name"      → borrower full legal name
+             id="email"     → contact email address
+             id="ownership" → ownership percentage in the business
+ 
+           FIELDS WITHOUT IDs (display only, not used in calculations):
+             Phone, Citizenship, Credit Authorization
+      --------------------------------------------------------- -->
+      <section id="borrower" class="card hidden">
+        <h2>Borrower Information</h2>
+        <div class="grid">
+ 
+          <!-- id="name" → read by generateCreditMemo() for the memo header -->
+          <div><label>Full Legal Name</label><input id="name" value="Syed Asif"></div>
+ 
+          <!-- id="email" → read by generateCreditMemo() for the overview table -->
+          <div><label>Email</label><input id="email" value="borrower@example.com"></div>
+ 
+          <!-- No id — display only, not used in any calculation -->
+          <div><label>Phone</label><input value="+1 555 123 4567"></div>
+ 
+          <!-- id="ownership" → read by generateCreditMemo() for ownership % -->
+          <div><label>Ownership %</label><input id="ownership" type="number" value="100"></div>
+ 
+          <!-- Dropdown — display only in this demo -->
+          <div><label>Citizenship / Residency</label>
+            <select>
+              <option>U.S. Citizen</option>
+              <option>Permanent Resident</option>
+              <option>Eligible Non-Citizen</option>
+            </select>
+          </div>
+ 
+          <!-- Dropdown — display only in this demo -->
+          <div><label>Credit Authorization</label>
+            <select>
+              <option>Authorized</option>
+              <option>Pending</option>
+            </select>
+          </div>
+ 
+        </div>
+      </section><!-- end #borrower -->
+ 
+ 
+      <!-- --------------------------------------------------------
+           SECTION 3: BUSINESS INFORMATION — id="business"
+           class="hidden" = invisible on load.
+ 
+           Collects details about the applicant's company.
+ 
+           FIELDS WITH IDs (used by calculator.js):
+             id="bizName"  → company name, appears in memo title and body
+             id="industry" → industry sector, appears in financial analysis
+             id="years"    → years in business
+                             USED IN SCORING: years >= 2 adds +10 points
+                             USED IN MEMO:    appears in analysis paragraph
+ 
+           FIELDS WITHOUT IDs (display only):
+             EIN, Business Type, Employees
+      --------------------------------------------------------- -->
+      <section id="business" class="card hidden">
+        <h2>Business Information</h2>
+        <div class="grid">
+ 
+          <!-- id="bizName" → read by generateCreditMemo() -->
+          <div><label>Business Name</label><input id="bizName" value="Asif Capital LLC"></div>
+ 
+          <!-- No id — display only -->
+          <div><label>EIN</label><input value="12-3456789"></div>
+ 
+          <!-- Dropdown — display only -->
+          <div><label>Business Type</label>
+            <select>
+              <option>LLC</option>
+              <option>Corporation</option>
+              <option>Sole Proprietor</option>
+              <option>Partnership</option>
+            </select>
+          </div>
+ 
+          <!-- id="industry" → read by generateCreditMemo() -->
+          <div><label>Industry / NAICS</label><input id="industry" value="Finance / Compliance Technology"></div>
+ 
+          <!-- id="years" → used by calculateScore() AND generateCreditMemo() -->
+          <div><label>Years in Business</label><input id="years" type="number" value="3"></div>
+ 
+          <!-- No id — display only -->
+          <div><label>Employees</label><input type="number" value="8"></div>
+ 
+        </div>
+      </section><!-- end #business -->
+ 
+ 
+      <!-- --------------------------------------------------------
+           SECTION 4: LOAN REQUEST — id="loan"
+           class="hidden" = invisible on load.
+ 
+           Captures the specific loan product being requested.
+ 
+           FIELDS WITH IDs (used by calculator.js):
+             id="program" → SBA loan type (7a, Express, 504, Microloan)
+                            shown on Dashboard card and in memo overview
+             id="amount"  → dollar amount requested
+                            shown on Dashboard card and in memo overview
+             id="funds"   → purpose of the loan (working capital, equipment etc.)
+                            shown in memo terms and executive summary
+ 
+           FIELDS WITHOUT IDs (display only):
+             Requested Term
+      --------------------------------------------------------- -->
+      <section id="loan" class="card hidden">
+        <h2>Loan Request</h2>
+        <div class="grid">
+ 
+          <!-- id="program" → generateCreditMemo() reads this and updates #dashProgram -->
+          <div><label>SBA Program</label>
+            <select id="program">
+              <option>SBA 7(a)</option>
+              <option>SBA Express</option>
+              <option>SBA 504</option>
+              <option>Microloan</option>
+            </select>
+          </div>
+ 
+          <!-- id="amount" → generateCreditMemo() reads this and updates #dashAmount -->
+          <div><label>Loan Amount</label><input id="amount" type="number" value="250000"></div>
+          <!-- id="funds" → read by generateCreditMemo() for memo body text -->
           <div><label>Use of Funds</label><select id="funds"><option>Working capital</option><option>Equipment</option><option>Commercial real estate</option><option>Inventory</option><option>Refinance debt</option></select></div>
+          <!-- No id — display only -->
           <div><label>Requested Term</label><select><option>10 years</option><option>7 years</option><option>5 years</option><option>25 years</option></select></div>
         </div>
-      </section>
+      </section><!-- end #loan -->
 
-      <!-- Financials panel: inputs used by calculateScore() for the demo risk score. -->
+
+
+
+
+      
+      <!-- --------------------------------------------------------
+           SECTION 5: FINANCIAL INFORMATION — id="financials"
+           class="hidden" = invisible on load.
+ 
+           The most important section for the risk score calculation.
+           All 4 inputs are read by calculator.js.
+ 
+           FIELDS WITH IDs (all used by calculateScore AND generateCreditMemo):
+             id="revenue" → annual gross revenue
+                            SCORE RULE: revenue > $500,000 → +10 points
+             id="income"  → annual net profit
+                            SCORE RULE: income > $100,000  → +12 points
+             id="debt"    → total existing business debt
+                            SCORE RULE: debt < income      → +10 points
+             id="bank"    → average monthly bank balance
+                            SCORE RULE: bank > $50,000     → +8 points
+ 
+           THE BUTTON:
+             onclick="calculateScore()" calls the function in calculator.js.
+             That function reads all 4 fields above, runs the scoring rules,
+             and updates the Dashboard score number and progress bar width.
+      --------------------------------------------------------- -->
       <section id="financials" class="card hidden">
         <h2>Financial Information</h2>
         <div class="grid">
+          <!-- id="revenue" → score rule: > $500,000 adds +10 points -->
           <div><label>Annual Revenue</label><input id="revenue" type="number" value="950000"></div>
+          <!-- id="income" → score rule: > $100,000 adds +12 points -->
           <div><label>Net Income</label><input id="income" type="number" value="145000"></div>
+          <!-- id="debt" → score rule: debt < income adds +10 points -->
           <div><label>Existing Business Debt</label><input id="debt" type="number" value="80000"></div>
+          <!-- id="bank" → score rule: > $50,000 adds +8 points -->
           <div><label>Average Bank Balance</label><input id="bank" type="number" value="120000"></div>
         </div>
-        <!-- Recalculates the dashboard score using the fields above. -->
-        <button class="btn" onclick="calculateScore()">Calculate Risk Score</button>
-      </section>
 
-      <!-- Compliance panel: static demo statuses for required screening steps. -->
+        
+        <!--
+          CALCULATE RISK SCORE BUTTON
+          onclick="calculateScore()" — defined in js/calculator.js
+          Reads revenue, income, debt, bank, and years fields.
+          Calculates a score from 20–95, then:
+            → updates id="dashScore" text on the Dashboard
+            → updates id="scoreBar" width on the Dashboard
+        -->
+        <button class="btn" onclick="calculateScore()">Calculate Risk Score</button>
+      </section><!-- end #financials -->
+
+
+
+      
+      <!-- --------------------------------------------------------
+           SECTION 6: COMPLIANCE & RISK — id="compliance"
+           class="hidden" = invisible on load.
+ 
+           A static checklist showing the status of each regulatory
+           compliance check required for SBA loan processing.
+             ✅ = completed
+             ⚠️ = pending / not yet done
+ 
+           In this demo these are hardcoded static text.
+           In a real production app, each status would be fetched
+           from a live compliance API (KYC provider, OFAC database etc.)
+           and updated dynamically based on actual screening results.
+      --------------------------------------------------------- -->
       <section id="compliance" class="card hidden">
         <h2>Compliance & Risk</h2>
         <ul class="checklist">
@@ -117,12 +780,38 @@
           <li>⚠️ Fraud anomaly review pending</li>
           <li>✅ SBA eligibility questionnaire completed</li>
         </ul>
-      </section>
+      </section><!-- end #compliance -->
 
-      <!-- Documents panel: sample checklist plus shortcut to the credit memo generator. -->
+
+
+      
+      <!-- --------------------------------------------------------
+           SECTION 7: DOCUMENT CHECKLIST — id="documents"
+           class="hidden" = invisible on load.
+ 
+           Two parts:
+             PART A — Checklist of required SBA documents
+               Each <li> has a checkbox the user can tick.
+               checked = already uploaded / available in this demo.
+               Unchecked = still outstanding.
+ 
+             PART B — Automation card (nested card inside the section)
+               Explains that the credit memo is auto-generated from
+               the data entered in other sections — no file upload needed.
+               Contains a button that navigates directly to Section 8.
+ 
+           THE NAVIGATION BUTTON:
+             onclick="showSection('underwriting',
+                      document.querySelectorAll('nav button')[7])"
+ 
+             document.querySelectorAll('nav button')[7]
+               → selects all nav buttons, takes the one at index 7
+               → that is the 8th button: "Generate Credit Memo"
+               → passes it to showSection() so it gets highlighted blue
+      --------------------------------------------------------- -->
       <section id="documents" class="card hidden">
         <h2>Document Checklist</h2>
-        <!-- Checkboxes represent common SBA package documents. -->
+        <!-- Part A: Document upload checklist -->
         <ul class="checklist">
           <li><input type="checkbox" checked> Government ID</li>
           <li><input type="checkbox" checked> Business tax returns</li>
@@ -134,31 +823,103 @@
           <li><input type="checkbox" id="creditMemoCheck" checked> Credit memo generated from application data</li>
         </ul>
 
-        <!-- Secondary card explains that the memo is generated from entered data. -->
+
+        <!-- Part B: Automation info card + navigation button -->
         <div class="card automation-card">
           <h3>Credit Memo Automation</h3>
           <p>No upload needed. The app uses borrower, business, loan, financial, and compliance information to generate a bank-style credit memo.</p>
+          <!--
+            Navigate to Credit Memo section AND highlight its nav button.
+            document.querySelectorAll('nav button')[7] = 8th nav button (index 7)
+            This is passed to showSection() so it turns blue/active.
+          -->
           <button class="btn secondary" onclick="showSection('underwriting', document.querySelectorAll('nav button')[7])">Go to Credit Memo Generator</button>
         </div>
-      </section>
+      </section><!-- end #documents -->
 
-      <!-- Underwriting panel: generates, downloads, or prints the credit memo. -->
+
+      
+
+      <!-- --------------------------------------------------------
+           SECTION 8: CREDIT MEMO GENERATOR — id="underwriting"
+           class="hidden" = invisible on load.
+ 
+           The final and most important section.
+           Three action buttons trigger three different functions:
+ 
+           BUTTON 1 — Generate Credit Memo
+             onclick="generateCreditMemo()" → defined in calculator.js
+             Reads ALL form fields from all 8 sections.
+             Calculates score, debt-to-income ratio, profit margin.
+             Builds a complete formatted HTML credit memo.
+             Injects it into id="summary" replacing the placeholder text.
+             Also updates id="dashProgram" and id="dashAmount" on Dashboard.
+ 
+           BUTTON 2 — Download Memo as Text
+             onclick="downloadMemo()" → defined in calculator.js
+             If memo not yet generated, auto-generates it first.
+             Converts memo content to plain text.
+             Creates a temporary download link in memory.
+             Triggers browser file download as "generated-credit-memo.txt".
+ 
+           BUTTON 3 — Print / Save as PDF
+             onclick="window.print()" → built into the browser, no custom code needed.
+             Opens the browser print dialog.
+             User can choose to print on paper or save as PDF.
+             styles.css @media print rules hide the nav and buttons
+             so only the memo content is printed.
+ 
+           OUTPUT AREA — id="summary"
+             Default state: dark background with placeholder text.
+             After Generate is clicked: calculator.js replaces innerHTML
+             with a complete white-paper formatted credit memo document.
+      --------------------------------------------------------- -->
       <section id="underwriting" class="card hidden">
         <h2>Credit Memo Generator</h2>
         <p class="muted">Generate a credit memo automatically using the borrower profile, business details, loan request, financials, compliance checks, and document status.</p>
-        <!-- Action buttons call the memo, download, and print workflows. -->
+        <!-- Three action buttons in a horizontal row -->
         <div class="row">
+          <!-- Button 1: calls generateCreditMemo() in calculator.js -->
           <button class="btn secondary" onclick="generateCreditMemo()">Generate Credit Memo</button>
+          <!-- Button 2: calls downloadMemo() in calculator.js -->
           <button class="btn" onclick="downloadMemo()">Download Memo as Text</button>
+          
+          <!-- Button 3: browser built-in print — no custom JS needed -->
           <button class="btn" onclick="window.print()">Print / Save as PDF</button>
         </div>
-        <!-- The generated memo HTML is inserted into this container. -->
+        <!--
+          MEMO OUTPUT CONTAINER — id="summary"
+          Before Generate is clicked:
+            Shows dark panel with placeholder instruction text.
+          After Generate is clicked:
+            calculator.js does: document.getElementById('summary').innerHTML = memoHTML
+            The dark placeholder is replaced with a full white credit memo document.
+        -->
         <div id="summary" class="summary">Click “Generate Credit Memo” to create a demo credit memo.</div>
-      </section>
-    </main>
-  </div>
+      </section><!-- end #underwriting -->
+    </main><!-- end <main> -->
+  </div><!-- end .container -->
 
-  <!-- App scripts: navigation first, then calculator/memo functions. -->
+
+  
+  <!-- ============================================================
+       JAVASCRIPT FILES
+       Loaded at the very bottom of <body> — not in <head>.
+ 
+       WHY AT THE BOTTOM?
+         The browser reads HTML top to bottom line by line.
+         If <script> tags were in <head>, the JS would try to run
+         before the HTML elements exist. getElementById() would
+         return null and nothing would work.
+         Loading at the bottom guarantees all elements are
+         already built before any JS code runs.
+ 
+       WHY THIS ORDER?
+         app.js loads FIRST because it defines showSection().
+         calculator.js loads SECOND because generateCreditMemo()
+         calls showSection() — which must already be defined.
+         Always load a file before any file that depends on it.
+  ============================================================= -->
   <script src="js/app.js"></script>
   <script src="js/calculator.js"></script>
 </body>
