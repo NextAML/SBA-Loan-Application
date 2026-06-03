@@ -8,3 +8,350 @@
             so the entire color theme can be changed in one place.
 */
 
+/* Global theme tokens used throughout the app. */
+:root {
+  --bg: #f4f7fb;
+  --card: #ffffff;
+  --text: #172033;
+  --muted: #64748b;
+  --primary: #1d4ed8;
+  --primary2: #0f172a;
+  --green: #16a34a;
+  --yellow: #ca8a04;
+  --red: #dc2626;
+  --border: #e2e8f0;
+}
+
+/* Make element sizing predictable across cards, forms, and layout grids. */
+* {
+  box-sizing: border-box;
+}
+
+/* Base page canvas and typography. */
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(135deg, #eef4ff, #f8fafc);
+  color: var(--text);
+}
+
+/* Top banner with the app title and summary line. */
+header {
+  background: linear-gradient(135deg, #0f172a, #1d4ed8);
+  color: white;
+  padding: 28px;
+}
+
+header h1 {
+  margin: 0 0 8px;
+  font-size: 32px;
+}
+
+header p {
+  margin: 0;
+  color: #dbeafe;
+}
+
+/* Main app shell: sidebar navigation plus active content area. */
+.container {
+  max-width: 1180px;
+  margin: 24px auto;
+  padding: 0 16px;
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 20px;
+}
+
+/* Sticky sidebar card containing section navigation buttons. */
+nav {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 14px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, .08);
+  height: fit-content;
+  position: sticky;
+  top: 16px;
+}
+
+/* Sidebar button default state. */
+nav button {
+  display: block;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 13px 14px;
+  text-align: left;
+  border-radius: 12px;
+  cursor: pointer;
+  color: var(--text);
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+/* Active and hover states show the currently selected section. */
+nav button.active,
+nav button:hover {
+  background: #dbeafe;
+  color: var(--primary);
+}
+
+/* Content column stacks each section card with consistent spacing. */
+main {
+  display: grid;
+  gap: 18px;
+}
+
+/* Shared panel surface for sections and nested document automation area. */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: 22px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, .08);
+}
+
+.card h2 {
+  margin-top: 0;
+}
+
+/* Two-column form/metric layout used inside each section. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+/* Compact labels for all form fields. */
+label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* Shared form field styling. */
+input,
+select,
+textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 14px;
+  background: white;
+}
+
+textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* Primary action button. */
+.btn {
+  background: var(--primary);
+  color: white;
+  border: 0;
+  padding: 13px 18px;
+  border-radius: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 14px;
+}
+
+/* Dark alternate button for higher-emphasis secondary actions. */
+.btn.secondary {
+  background: #0f172a;
+}
+
+/* Flexible action row for button groups. */
+.row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* Small status tags on the dashboard. */
+.pill {
+  display: inline-flex;
+  padding: 7px 10px;
+  border-radius: 999px;
+  background: #e0f2fe;
+  color: #075985;
+  font-weight: 700;
+  font-size: 12px;
+  margin: 4px;
+}
+
+/* Dashboard summary cards. */
+.metric {
+  padding: 18px;
+  border-radius: 18px;
+  background: #f8fafc;
+  border: 1px solid var(--border);
+}
+
+.metric strong {
+  font-size: 28px;
+  display: block;
+}
+
+/* Risk score progress track. */
+.score {
+  height: 18px;
+  background: #e5e7eb;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+/* Risk score progress fill; width is updated by calculateScore(). */
+.score div {
+  height: 100%;
+  width: 72%;
+  background: linear-gradient(90deg, #16a34a, #1d4ed8);
+}
+
+/* Checklist rows used by compliance and documents sections. */
+.checklist li {
+  margin: 10px 0;
+  padding: 12px;
+  background: #f8fafc;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  list-style: none;
+}
+
+/* Utility class toggled by showSection() to hide inactive panels. */
+.hidden {
+  display: none;
+}
+
+/* Container for the generated credit memo or default placeholder text. */
+.summary {
+  white-space: pre-line;
+  background: #0f172a;
+  color: #e5e7eb;
+  padding: 18px;
+  border-radius: 16px;
+  line-height: 1.5;
+  font-family: Arial, Helvetica, sans-serif;
+  margin-top: 15px;
+}
+
+/* White paper-style memo inserted into the summary area. */
+.memo-paper {
+  background: white;
+  color: #111827;
+  border-radius: 14px;
+  padding: 22px;
+  white-space: normal;
+  line-height: 1.45;
+}
+
+/* Memo headings use the same dark title color. */
+.memo-paper h1,
+.memo-paper h2,
+.memo-paper h3 {
+  color: #0f172a;
+}
+
+/* Memo tables keep financial and compliance details readable. */
+.memo-paper table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 10px 0 18px;
+  font-size: 13px;
+}
+
+/* Table cell borders and spacing for generated memo content. */
+.memo-paper th,
+.memo-paper td {
+  border: 1px solid #cbd5e1;
+  padding: 8px;
+  text-align: left;
+  vertical-align: top;
+}
+
+.memo-paper th {
+  background: #e2e8f0;
+}
+
+/* Nested card inside the document checklist for memo automation guidance. */
+.automation-card {
+  margin-top: 18px;
+  box-shadow: none;
+}
+
+.automation-card h3 {
+  margin-top: 0;
+}
+
+/* Muted helper text in secondary explanations. */
+.automation-card p,
+.muted {
+  color: var(--muted);
+  margin-top: 0;
+}
+
+/* Centered, underlined title inside the generated memo. */
+.memo-title {
+  text-align: center;
+  text-decoration: underline;
+}
+
+/* Print mode: hide the app shell and print only the credit memo. */
+@media print {
+  body {
+    background: white;
+  }
+
+  header,
+  nav,
+  .row {
+    display: none !important;
+  }
+
+  .container {
+    display: block;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  .card {
+    box-shadow: none;
+    border: 0;
+  }
+
+  main section {
+    display: none !important;
+  }
+
+  #underwriting {
+    display: block !important;
+  }
+
+  .summary {
+    background: white;
+    color: black;
+    padding: 0;
+  }
+}
+
+/* Mobile layout: stack sidebar and content, then collapse grids to one column. */
+@media (max-width: 850px) {
+  .container {
+    grid-template-columns: 1fr;
+  }
+
+  nav {
+    position: static;
+  }
+
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}

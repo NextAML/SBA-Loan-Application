@@ -6,4 +6,160 @@
             the navigation sidebar, and all form fields.
             Loads styles.css for visuals, app.js and calculator.js for logic.
 -->
+            
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SBA Loan Application Demo</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <!-- Page title area shown above the application workspace. -->
+  <header>
+    <h1>SBA Loan Application Demo</h1>
+    <p>Bank-style loan intake, compliance screening, document checklist, and underwriting summary.</p>
+  </header>
 
+  <!-- Two-column app shell: left navigation and right content panels. -->
+  <div class="container">
+    <!-- Sidebar navigation. Each button calls showSection() to reveal one panel. -->
+    <nav>
+      <button class="active" onclick="showSection('dashboard', this)">Dashboard</button>
+      <button onclick="showSection('borrower', this)">Borrower Info</button>
+      <button onclick="showSection('business', this)">Business Info</button>
+      <button onclick="showSection('loan', this)">Loan Request</button>
+      <button onclick="showSection('financials', this)">Financials</button>
+      <button onclick="showSection('compliance', this)">Compliance & Risk</button>
+      <button onclick="showSection('documents', this)">Documents</button>
+      <button onclick="showSection('underwriting', this)">Generate Credit Memo</button>
+    </nav>
+
+    <main>
+      <!-- Dashboard: high-level application status and live score summary. -->
+      <section id="dashboard" class="card">
+        <h2>Application Dashboard</h2>
+        <!-- Metric cards summarize the current stage, risk score, program, and amount. -->
+        <div class="grid">
+          <div class="metric"><span>Status</span><strong>In Review</strong><p>Current stage: Pre-underwriting</p></div>
+          <div class="metric"><span>Risk Score</span><strong id="dashScore">72 / 100</strong><div class="score"><div id="scoreBar"></div></div></div>
+          <div class="metric"><span>Loan Program</span><strong id="dashProgram">SBA 7(a)</strong><p>Selected by applicant</p></div>
+          <div class="metric"><span>Requested Amount</span><strong id="dashAmount">$250,000</strong><p>Use of funds: Working capital</p></div>
+        </div>
+        <!-- Pills call out the major underwriting/compliance workstreams. -->
+        <p>
+          <span class="pill">KYC Required</span>
+          <span class="pill">OFAC Screening</span>
+          <span class="pill">Cash Flow Review</span>
+          <span class="pill">Document Validation</span>
+        </p>
+      </section>
+
+      <!-- Borrower panel: owner/contact information used in the credit memo. -->
+      <section id="borrower" class="card hidden">
+        <h2>Borrower Information</h2>
+        <div class="grid">
+          <div><label>Full Legal Name</label><input id="name" value="Syed Asif"></div>
+          <div><label>Email</label><input id="email" value="borrower@example.com"></div>
+          <div><label>Phone</label><input value="+1 555 123 4567"></div>
+          <div><label>Ownership %</label><input id="ownership" type="number" value="100"></div>
+          <div><label>Citizenship / Residency</label><select><option>U.S. Citizen</option><option>Permanent Resident</option><option>Eligible Non-Citizen</option></select></div>
+          <div><label>Credit Authorization</label><select><option>Authorized</option><option>Pending</option></select></div>
+        </div>
+      </section>
+
+      <!-- Business panel: company profile and operating history. -->
+      <section id="business" class="card hidden">
+        <h2>Business Information</h2>
+        <div class="grid">
+          <div><label>Business Name</label><input id="bizName" value="Asif Capital LLC"></div>
+          <div><label>EIN</label><input value="12-3456789"></div>
+          <div><label>Business Type</label><select><option>LLC</option><option>Corporation</option><option>Sole Proprietor</option><option>Partnership</option></select></div>
+          <div><label>Industry / NAICS</label><input id="industry" value="Finance / Compliance Technology"></div>
+          <div><label>Years in Business</label><input id="years" type="number" value="3"></div>
+          <div><label>Employees</label><input type="number" value="8"></div>
+        </div>
+      </section>
+
+      <!-- Loan panel: requested SBA product, amount, use of funds, and term. -->
+      <section id="loan" class="card hidden">
+        <h2>Loan Request</h2>
+        <div class="grid">
+          <div><label>SBA Program</label><select id="program"><option>SBA 7(a)</option><option>SBA Express</option><option>SBA 504</option><option>Microloan</option></select></div>
+          <div><label>Loan Amount</label><input id="amount" type="number" value="250000"></div>
+          <div><label>Use of Funds</label><select id="funds"><option>Working capital</option><option>Equipment</option><option>Commercial real estate</option><option>Inventory</option><option>Refinance debt</option></select></div>
+          <div><label>Requested Term</label><select><option>10 years</option><option>7 years</option><option>5 years</option><option>25 years</option></select></div>
+        </div>
+      </section>
+
+      <!-- Financials panel: inputs used by calculateScore() for the demo risk score. -->
+      <section id="financials" class="card hidden">
+        <h2>Financial Information</h2>
+        <div class="grid">
+          <div><label>Annual Revenue</label><input id="revenue" type="number" value="950000"></div>
+          <div><label>Net Income</label><input id="income" type="number" value="145000"></div>
+          <div><label>Existing Business Debt</label><input id="debt" type="number" value="80000"></div>
+          <div><label>Average Bank Balance</label><input id="bank" type="number" value="120000"></div>
+        </div>
+        <!-- Recalculates the dashboard score using the fields above. -->
+        <button class="btn" onclick="calculateScore()">Calculate Risk Score</button>
+      </section>
+
+      <!-- Compliance panel: static demo statuses for required screening steps. -->
+      <section id="compliance" class="card hidden">
+        <h2>Compliance & Risk</h2>
+        <ul class="checklist">
+          <li>✅ CIP / KYC identity verification</li>
+          <li>✅ OFAC sanctions screening</li>
+          <li>✅ Beneficial ownership review</li>
+          <li>⚠️ Adverse media screening pending</li>
+          <li>⚠️ Fraud anomaly review pending</li>
+          <li>✅ SBA eligibility questionnaire completed</li>
+        </ul>
+      </section>
+
+      <!-- Documents panel: sample checklist plus shortcut to the credit memo generator. -->
+      <section id="documents" class="card hidden">
+        <h2>Document Checklist</h2>
+        <!-- Checkboxes represent common SBA package documents. -->
+        <ul class="checklist">
+          <li><input type="checkbox" checked> Government ID</li>
+          <li><input type="checkbox" checked> Business tax returns</li>
+          <li><input type="checkbox"> Personal tax returns</li>
+          <li><input type="checkbox" checked> Bank statements</li>
+          <li><input type="checkbox"> Profit & loss statement</li>
+          <li><input type="checkbox"> Balance sheet</li>
+          <li><input type="checkbox"> Business license / formation documents</li>
+          <li><input type="checkbox" id="creditMemoCheck" checked> Credit memo generated from application data</li>
+        </ul>
+
+        <!-- Secondary card explains that the memo is generated from entered data. -->
+        <div class="card automation-card">
+          <h3>Credit Memo Automation</h3>
+          <p>No upload needed. The app uses borrower, business, loan, financial, and compliance information to generate a bank-style credit memo.</p>
+          <button class="btn secondary" onclick="showSection('underwriting', document.querySelectorAll('nav button')[7])">Go to Credit Memo Generator</button>
+        </div>
+      </section>
+
+      <!-- Underwriting panel: generates, downloads, or prints the credit memo. -->
+      <section id="underwriting" class="card hidden">
+        <h2>Credit Memo Generator</h2>
+        <p class="muted">Generate a credit memo automatically using the borrower profile, business details, loan request, financials, compliance checks, and document status.</p>
+        <!-- Action buttons call the memo, download, and print workflows. -->
+        <div class="row">
+          <button class="btn secondary" onclick="generateCreditMemo()">Generate Credit Memo</button>
+          <button class="btn" onclick="downloadMemo()">Download Memo as Text</button>
+          <button class="btn" onclick="window.print()">Print / Save as PDF</button>
+        </div>
+        <!-- The generated memo HTML is inserted into this container. -->
+        <div id="summary" class="summary">Click “Generate Credit Memo” to create a demo credit memo.</div>
+      </section>
+    </main>
+  </div>
+
+  <!-- App scripts: navigation first, then calculator/memo functions. -->
+  <script src="js/app.js"></script>
+  <script src="js/calculator.js"></script>
+</body>
+</html>

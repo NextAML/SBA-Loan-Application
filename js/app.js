@@ -6,3 +6,16 @@
             the active highlight on the sidebar navigation button.
 */
 
+function showSection(id, btn) {
+  // Hide every section before revealing the selected one.
+  document.querySelectorAll('main section').forEach(section => section.classList.add('hidden'));
+
+  // Show the section whose id was passed from the clicked navigation button.
+  document.getElementById(id).classList.remove('hidden');
+
+  // Remove the active highlight from all navigation buttons.
+  document.querySelectorAll('nav button').forEach(button => button.classList.remove('active'));
+
+  // Highlight the button that opened the current section.
+  btn.classList.add('active');
+}
