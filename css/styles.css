@@ -1,1 +1,10 @@
+/*
+  FILE: css/styles.css
+  FUNCTION: Controls all the visual styling of the app.
+            Sets colors, fonts, layout, card shapes, buttons,
+            the sidebar navigation, form inputs, progress bar,
+            and responsive rules for mobile screens.
+            Uses CSS variables (--primary, --card, --border etc.)
+            so the entire color theme can be changed in one place.
+*/
 
