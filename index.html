@@ -232,6 +232,7 @@
           <div class="metric"><span>Risk Score</span><strong id="dashScore">72 / 100</strong><div class="score"><div id="scoreBar"></div></div></div>
           <div class="metric"><span>Loan Program</span><strong id="dashProgram">SBA 7(a)</strong><p>Selected by applicant</p></div>
           <div class="metric"><span>Requested Amount</span><strong id="dashAmount">$250,000</strong><p>Use of funds: Working capital</p></div>
+          <div class="metric"><span>FICO Score</span><strong id="dashFico">720</strong><p id="dashBureau">Experian • Soft Pull Demo</p></div>
         </div>
         <p>
           <span class="pill">KYC Required</span>
@@ -248,6 +249,9 @@
           <div><label>Email</label><input id="email" value="borrower@example.com"></div>
           <div><label>Phone</label><input value="+1 555 123 4567"></div>
           <div><label>Ownership %</label><input id="ownership" type="number" value="100"></div>
+          <div><label>FICO Score (Demo)</label><input id="ficoScore" type="number" value="720" min="300" max="850"></div>
+          <div><label>Credit Bureau</label><select id="creditBureau"><option>Experian</option><option>Equifax</option><option>TransUnion</option></select></div>
+          <div><label>Credit Pull Type</label><select id="pullType"><option>Soft Pull (Demo)</option><option>Hard Pull (Demo)</option><option>Manual Entry (Demo)</option></select></div>
           <div><label>Citizenship / Residency</label><select><option>U.S. Citizen</option><option>Permanent Resident</option><option>Eligible Non-Citizen</option></select></div>
           <div><label>Credit Authorization</label><select><option>Authorized</option><option>Pending</option></select></div>
         </div>
@@ -349,6 +353,9 @@
       const debt = Number(document.getElementById('debt').value || 0);
       const bank = Number(document.getElementById('bank').value || 0);
       const years = Number(document.getElementById('years').value || 0);
+      const fico = Number(document.getElementById('ficoScore').value || 0);
+      const bureau = document.getElementById('creditBureau').value;
+      const pullType = document.getElementById('pullType').value;
 
       let score = 50;
       if (revenue > 500000) score += 10;
@@ -356,10 +363,17 @@
       if (debt < income) score += 10;
       if (bank > 50000) score += 8;
       if (years >= 2) score += 10;
+      if (fico >= 800) score += 15;
+      else if (fico >= 750) score += 12;
+      else if (fico >= 700) score += 8;
+      else if (fico >= 650) score += 4;
+      else if (fico > 0 && fico < 600) score -= 10;
       score = Math.min(95, Math.max(20, score));
 
       document.getElementById('dashScore').innerText = score + ' / 100';
       document.getElementById('scoreBar').style.width = score + '%';
+      document.getElementById('dashFico').innerText = fico || 'N/A';
+      document.getElementById('dashBureau').innerText = bureau + ' • ' + pullType;
       alert('Risk score updated to ' + score + ' / 100');
       return score;
     }
@@ -369,6 +383,9 @@
       const name = document.getElementById('name').value;
       const email = document.getElementById('email').value;
       const ownership = document.getElementById('ownership').value;
+      const ficoScore = document.getElementById('ficoScore').value;
+      const creditBureau = document.getElementById('creditBureau').value;
+      const pullType = document.getElementById('pullType').value;
       const biz = document.getElementById('bizName').value;
       const industry = document.getElementById('industry').value;
       const years = document.getElementById('years').value;
@@ -388,6 +405,8 @@
 
       document.getElementById('dashProgram').innerText = program;
       document.getElementById('dashAmount').innerText = money(amount);
+      document.getElementById('dashFico').innerText = ficoScore || 'N/A';
+      document.getElementById('dashBureau').innerText = creditBureau + ' • ' + pullType;
 
       const memoHTML = `
       <div class="memo-paper" id="memoPaper">
@@ -402,6 +421,8 @@
         <table>
           <tr><th>Borrower</th><td>${biz}</td><th>Primary Contact</th><td>${name}</td></tr>
           <tr><th>Email</th><td>${email}</td><th>Ownership</th><td>${ownership}%</td></tr>
+          <tr><th>FICO Score</th><td>${ficoScore}</td><th>Credit Bureau</th><td>${creditBureau}</td></tr>
+          <tr><th>Credit Pull Type</th><td>${pullType}</td><th>Credit Data Source</th><td>Demo manual entry</td></tr>
           <tr><th>Loan Program</th><td>${program}</td><th>Requested Amount</th><td>${money(amount)}</td></tr>
           <tr><th>Purpose</th><td>${funds}</td><th>Industry</th><td>${industry}</td></tr>
           <tr><th>Years in Business</th><td>${years}</td><th>Demo Risk Score</th><td>${score}/100</td></tr>
@@ -410,7 +431,7 @@
 
         <h2>Executive Summary</h2>
         <p>${biz}, hereafter “the Applicant” or “the Borrower,” has requested a ${program} facility in the amount of ${money(amount)}. The purpose of the subject credit facility is to support ${funds.toLowerCase()} needs. The application has been reviewed using borrower-provided business, ownership, financial, and compliance information entered into the demo SBA loan application platform.</p>
-        <p>The borrower reports annual revenue of ${money(revenue)}, net income of ${money(income)}, existing business debt of ${money(debt)}, and average bank balance of ${money(bank)}. Based on the demo scoring model, the borrower receives a preliminary risk score of ${score}/100.</p>
+        <p>The borrower reports annual revenue of ${money(revenue)}, net income of ${money(income)}, existing business debt of ${money(debt)}, average bank balance of ${money(bank)}, and a demo FICO score of ${ficoScore} from ${creditBureau}. Based on the demo scoring model, the borrower receives a preliminary risk score of ${score}/100.</p>
 
         <h2>Summary Terms and Conditions</h2>
         <table>
@@ -424,6 +445,9 @@
 
         <h2>Business & Financial Analysis</h2>
         <p>The borrower operates in the ${industry} sector and has been in business for approximately ${years} year(s). Revenue and income information entered into the platform indicate a net profit margin of ${margin}. Existing debt compared to net income is approximately ${debtToIncome}. These metrics should be validated against tax returns, bank statements, P&amp;L statements, balance sheet, and credit bureau data.</p>
+
+        <h2>Credit Profile</h2>
+        <p>The demo borrower credit profile reflects a FICO score of ${ficoScore}, bureau source of ${creditBureau}, and pull type of ${pullType}. In a production environment, this value should be obtained only through an approved credit bureau or credit-reporting API with borrower consent and permissible purpose.</p>
 
         <h2>Strengths</h2>
         <ul>
@@ -450,6 +474,7 @@
           <tr><td>Beneficial Ownership</td><td>Required for owners meeting applicable threshold</td></tr>
           <tr><td>Fraud / Adverse Media</td><td>Pending review</td></tr>
           <tr><td>SBA Eligibility</td><td>Pending final certification</td></tr>
+          <tr><td>FCRA / Credit Consent</td><td>Demo only - production requires borrower consent and approved bureau access</td></tr>
         </table>
 
         <h2>Preliminary Recommendation</h2>
