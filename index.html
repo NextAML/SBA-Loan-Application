@@ -208,7 +208,7 @@
 </head>
 <body>
   <header>
-    <h1>SBA Loan Application Demo</h1>
+    <h1>🏦 SBA Loan Application Demo</h1>
     <p>Bank-style loan intake, compliance screening, document checklist, and underwriting summary.</p>
   </header>
 
@@ -263,7 +263,7 @@
         <div class="grid">
           <div><label>Business Name</label><input id="bizName" value="Asif Capital LLC"></div>
           <div><label>EIN</label><input value="12-3456789"></div>
-          <div><label>Business Type</label><select><option>LLC</option><option>Corporation</option><option>Sole Proprietor</option><option>Partnership</option></select></div>
+          <div><label>Business Type</label><select><option>Sole Proprietorship</option><option>Partnership</option><option>Corporation - C corp</option><option>Corporation - S corp</option><option>Corporation - Benefit Corporation</option><option>Corporation - Nonprofit</option><option>LLC</option></select></div>
           <div><label>Industry / NAICS</label><input id="industry" value="Finance / Compliance Technology"></div>
           <div><label>Years in Business</label><input id="years" type="number" value="3"></div>
           <div><label>Employees</label><input type="number" value="8"></div>
@@ -274,16 +274,16 @@
         <h2>Loan Request</h2>
         <div class="grid">
           <div><label>SBA Program</label><select id="program"><option>SBA 7(a)</option><option>SBA Express</option><option>SBA 504</option><option>Microloan</option></select></div>
-          <div><label>Loan Amount</label><input id="amount" type="number" value="250000"></div>
-          <div><label>Use of Funds</label><select id="funds"><option>Working capital</option><option>Equipment</option><option>Commercial real estate</option><option>Inventory</option><option>Refinance debt</option></select></div>
-          <div><label>Requested Term</label><select><option>10 years</option><option>7 years</option><option>5 years</option><option>25 years</option></select></div>
+          <div><label>Loan Amount</label><input id="amount" type="number" value="150000" max="150000"></div>
+          <div><label>Use of Funds</label><select id="funds"><option>Working capital</option><option>Equipment</option><option>Inventory</option></select></div>
+          <div><label>Requested Term</label><select><option>5 years</option><option>7 years</option><option>10 years</option><option>15 years</option></select></div>
         </div>
       </section>
 
       <section id="financials" class="card hidden">
         <h2>Financial Information</h2>
         <div class="grid">
-          <div><label>Annual Revenue</label><input id="revenue" type="number" value="950000"></div>
+          <div><label>Annual Revenue (Most Recent Year)</label><input id="revenue" type="number" value="950000"><small style="color:#64748b;margin-top:4px;display:block;">Use most recent fiscal year figures</small></div>
           <div><label>Net Income</label><input id="income" type="number" value="145000"></div>
           <div><label>Existing Business Debt</label><input id="debt" type="number" value="80000"></div>
           <div><label>Average Bank Balance</label><input id="bank" type="number" value="120000"></div>
@@ -301,6 +301,18 @@
           <li>⚠️ Fraud anomaly review pending</li>
           <li>✅ SBA eligibility questionnaire completed</li>
         </ul>
+        <div class="card" style="margin-top:18px;box-shadow:none;">
+          <h3 style="margin-top:0;">Credit Authorization</h3>
+          <div class="grid">
+            <div><label>Authorized By</label><input id="authBy" type="text" placeholder="Full name of authorizing officer"></div>
+            <div><label>Authorization Date</label><input id="authDate" type="date"></div>
+          </div>
+        </div>
+        <!-- Result Analysis box -->
+        <div class="card" style="margin-top:14px;box-shadow:none;">
+          <h3 style="margin-top:0;">Compliance Review Notes / Result Analysis</h3>
+          <textarea id="complianceNotes" placeholder="Enter compliance review findings, analyst notes, and result analysis here..."></textarea>
+        </div>
       </section>
 
       <section id="documents" class="card hidden">
@@ -312,6 +324,7 @@
           <li><input type="checkbox" checked> Bank statements</li>
           <li><input type="checkbox"> Profit & loss statement</li>
           <li><input type="checkbox"> Balance sheet</li>
+          <li><input type="checkbox"> Business Plan</li>
           <li><input type="checkbox"> Business license / formation documents</li>
           <li><input type="checkbox" id="creditMemoCheck" checked> Credit memo generated from application data</li>
         </ul>
