@@ -280,6 +280,7 @@
         </div>
       </section>
 
+      
       <section id="financials" class="card hidden">
         <h2>Financial Information</h2>
         <div class="grid">
@@ -287,12 +288,155 @@
           <div><label>Net Income</label><input id="income" type="number" value="145000"></div>
           <div><label>Existing Business Debt</label><input id="debt" type="number" value="80000"></div>
           <div><label>Average Bank Balance</label><input id="bank" type="number" value="120000"></div>
-          <div><label>Annual Debt Service (Payments)</label><input id="debtService" type="number" value="24000"><small style="color:#64748b;margin-top:4px;display:block;">Total annual principal + interest payments on existing debt</small></div>
+          <div><label>Annual Debt Service (Payments)</label><input id="debtService" type="number" value="24000"><small style="color:#64748b;margin-top:4px;display:block;">Total annual principal + interest payments</small></div>
           <div><label>Current Liabilities (Due within 1 Year)</label><input id="currentLiabilities" type="number" value="35000"></div>
         </div>
+ 
+        <div class="card" style="margin-top:18px;box-shadow:none;background:#f8fafc;">
+          <h3 style="margin-top:0;">Borrowing Base Information</h3>
+          <div class="grid">
+            <div><label>A/R Total</label><input id="arTotal" type="number" placeholder="Total accounts receivable outstanding"><small style="color:#64748b;margin-top:4px;display:block;">Gross A/R balance before eligibility adjustments</small></div>
+            <div><label>Eligible A/R</label><input id="eligibleAR" type="number" placeholder="Eligible accounts receivable"><small style="color:#64748b;margin-top:4px;display:block;">A/R ≤ 90 days, excluding concentration & ineligible accounts</small></div>
+            <div><label>Inventory Value</label><input id="inventoryValue" type="number" placeholder="Total inventory at cost"><small style="color:#64748b;margin-top:4px;display:block;">Total inventory value at lower of cost or market</small></div>
+            <div><label>Eligible Inventory</label><input id="eligibleInventory" type="number" placeholder="Eligible inventory value"><small style="color:#64748b;margin-top:4px;display:block;">Finished goods only, net of reserves and obsolete stock</small></div>
+          </div>
+        </div>
+ 
+        <div class="card" style="margin-top:14px;box-shadow:none;background:#f8fafc;">
+          <h3 style="margin-top:0;">Debt / Equity Metrics</h3>
+          <div class="grid">
+            <div><label>Total Equity (Net Worth)</label><input id="totalEquity" type="number" placeholder="Total owner's equity / net worth"><small style="color:#64748b;margin-top:4px;display:block;">Total assets minus total liabilities</small></div>
+            <div><label>Total Assets</label><input id="totalAssets" type="number" placeholder="Total business assets"><small style="color:#64748b;margin-top:4px;display:block;">Current + fixed + other assets</small></div>
+            <div><label>Total Liabilities</label><input id="totalLiabilities" type="number" placeholder="Total business liabilities"><small style="color:#64748b;margin-top:4px;display:block;">Current + long-term liabilities</small></div>
+          </div>
+        </div>
+ 
         <button class="btn" onclick="calculateScore()">Calculate Risk Score</button>
       </section>
 
+
+      
+      <section id="collateral" class="card hidden">
+        <h2>Collateral</h2>
+ 
+        <div class="card" style="box-shadow:none;background:#f8fafc;margin-bottom:14px;">
+          <h3 style="margin-top:0;">Real Estate</h3>
+          <div class="grid">
+            <div><label>Property Address</label><input id="colREAddress" type="text" placeholder="Address of collateral property"></div>
+            <div><label>Property Type</label><select id="colREType"><option>Owner-Occupied Commercial</option><option>Investment / Rental</option><option>Primary Residence</option><option>Vacant Land</option></select></div>
+            <div><label>Appraised Value ($)</label><input id="colREValue" type="number" placeholder="Most recent appraisal value"></div>
+            <div><label>Outstanding Mortgage ($)</label><input id="colREMortgage" type="number" placeholder="Remaining mortgage balance"></div>
+            <div><label>Estimated Net Equity ($)</label><input id="colREEquity" type="number" placeholder="Appraised value minus mortgage"></div>
+            <div><label>Lien Position</label><select id="colRELien"><option>1st Lien</option><option>2nd Lien</option><option>3rd Lien</option></select></div>
+          </div>
+        </div>
+ 
+        <div class="card" style="box-shadow:none;background:#f8fafc;margin-bottom:14px;">
+          <h3 style="margin-top:0;">Equipment & Machinery</h3>
+          <div class="grid">
+            <div><label>Equipment Description</label><input id="colEquipDesc" type="text" placeholder="Type and description of equipment"></div>
+            <div><label>Year / Make / Model</label><input id="colEquipYear" type="text" placeholder="e.g. 2021 Caterpillar 320"></div>
+            <div><label>Forced Liquidation Value ($)</label><input id="colEquipFLV" type="number" placeholder="FLV — value at forced sale"></div>
+            <div><label>Orderly Liquidation Value ($)</label><input id="colEquipOLV" type="number" placeholder="OLV — value in orderly sale"></div>
+          </div>
+        </div>
+ 
+        <div class="card" style="box-shadow:none;background:#f8fafc;margin-bottom:14px;">
+          <h3 style="margin-top:0;">Business Assets (A/R & Inventory)</h3>
+          <div class="grid">
+            <div><label>Eligible A/R Pledged ($)</label><input id="colARPledged" type="number" placeholder="A/R pledged as collateral"></div>
+            <div><label>Advance Rate on A/R (%)</label><input id="colARRate" type="number" value="80" placeholder="Typical: 70–85%"></div>
+            <div><label>Eligible Inventory Pledged ($)</label><input id="colInvPledged" type="number" placeholder="Inventory pledged as collateral"></div>
+            <div><label>Advance Rate on Inventory (%)</label><input id="colInvRate" type="number" value="50" placeholder="Typical: 40–60%"></div>
+          </div>
+        </div>
+ 
+        <div class="card" style="box-shadow:none;background:#f8fafc;">
+          <h3 style="margin-top:0;">Personal Assets</h3>
+          <div class="grid">
+            <div><label>Personal Real Estate Value ($)</label><input id="colPersonalRE" type="number" placeholder="Market value of personal property"></div>
+            <div><label>Personal RE Outstanding Mortgage ($)</label><input id="colPersonalMtg" type="number" placeholder="Remaining personal mortgage balance"></div>
+            <div><label>Other Personal Assets ($)</label><input id="colPersonalOther" type="number" placeholder="Vehicles, savings, investments, etc."></div>
+            <div><label>UCC-1 Filing Required</label><select id="colUCC"><option>Yes — All business assets</option><option>Yes — Specific assets only</option><option>No — Waived per SBA guidelines</option></select></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="guaranty" class="card hidden">
+        <h2>Guaranty</h2>
+ 
+        <div class="card" style="box-shadow:none;background:#f8fafc;margin-bottom:14px;">
+          <h3 style="margin-top:0;">Primary Guarantor</h3>
+          <div class="grid">
+            <div><label>Guarantor Full Name</label><input id="guar1Name" type="text" placeholder="Full legal name of guarantor"></div>
+            <div><label>Ownership % in Business</label><input id="guar1Ownership" type="number" placeholder="e.g. 100"></div>
+            <div><label>Guaranty Type</label><select id="guar1Type"><option>Unlimited Personal Guaranty</option><option>Limited Guaranty — Maximum Liability</option><option>Limited Guaranty — Principal Reduction</option><option>Limited Guaranty — Percentage</option></select></div>
+            <div><label>Guaranty Amount ($)</label><input id="guar1Amount" type="number" placeholder="For limited guaranty — dollar cap"></div>
+            <div><label>Personal Net Worth ($)</label><input id="guar1NetWorth" type="number" placeholder="Guarantor total personal net worth"></div>
+            <div><label>SBA Form 413 (Personal Financial Statement)</label><select id="guar1Form413"><option>Received</option><option>Pending</option><option>Waived — Credit Score ≤ $500k</option></select></div>
+          </div>
+        </div>
+ 
+        <div class="card" style="box-shadow:none;background:#f8fafc;margin-bottom:14px;">
+          <h3 style="margin-top:0;">Additional Guarantors (if applicable)</h3>
+          <div class="grid">
+            <div><label>Additional Guarantor Name</label><input id="guar2Name" type="text" placeholder="Name of additional guarantor"></div>
+            <div><label>Ownership % in Business</label><input id="guar2Ownership" type="number" placeholder="e.g. 20"></div>
+            <div><label>Guaranty Type</label><select id="guar2Type"><option>Unlimited Personal Guaranty</option><option>Limited Guaranty</option><option>N/A — Below 20% threshold</option></select></div>
+            <div><label>Relationship to Borrower</label><select id="guar2Rel"><option>Co-Owner</option><option>Spouse</option><option>Corporate Entity</option><option>Trust (20%+ ownership)</option></select></div>
+          </div>
+        </div>
+ 
+        <div class="card" style="box-shadow:none;background:#f8fafc;">
+          <h3 style="margin-top:0;">SBA Guaranty Coverage</h3>
+          <div class="grid">
+            <div><label>SBA Guaranty Percentage</label><select id="sbaGrntPct"><option>85% — Loans ≤ $150,000</option><option>75% — Loans > $150,000</option><option>50% — SBA Express</option></select></div>
+            <div><label>SBA Guaranteed Amount ($)</label><input id="sbaGrntAmt" type="number" placeholder="Loan amount × guaranty %"></div>
+            <div><label>Life Insurance Required</label><select id="sbaLifeIns"><option>Yes — Loans > $350,000 (key person)</option><option>No — Below $350,000 threshold</option><option>Lender discretion</option></select></div>
+            <div><label>Hazard Insurance Required</label><select id="sbaHazardIns"><option>Yes — All collateral assets</option><option>Modified — Loan ≤ $150,000</option><option>Follow lender policy</option></select></div>
+          </div>
+        </div>
+      </section>
+
+
+      <section id="covenants" class="card hidden">
+        <h2>Financial Covenants</h2>
+ 
+        <div class="card" style="box-shadow:none;background:#f8fafc;margin-bottom:14px;">
+          <h3 style="margin-top:0;">Maintenance Covenants (tested annually)</h3>
+          <div class="grid">
+            <div><label>Minimum DSCR Required</label><select id="covDSCR"><option>1.25x (SBA standard minimum)</option><option>1.15x (lender discretion)</option><option>1.35x (elevated risk)</option><option>Custom</option></select></div>
+            <div><label>Custom DSCR Threshold</label><input id="covDSCRCustom" type="number" placeholder="e.g. 1.20 — if Custom selected above"></div>
+            <div><label>Minimum Current Ratio</label><select id="covCurrentRatio"><option>1.00x</option><option>1.20x</option><option>1.50x</option><option>Custom</option></select></div>
+            <div><label>Maximum Debt / Equity Ratio</label><select id="covDebtEquity"><option>3.00x</option><option>4.00x</option><option>5.00x</option><option>Custom</option></select></div>
+            <div><label>Minimum Tangible Net Worth ($)</label><input id="covMinTNW" type="number" placeholder="e.g. 100000"></div>
+            <div><label>Maximum Owner Distributions (%)</label><input id="covMaxDist" type="number" placeholder="e.g. 50 — % of net income per year"></div>
+          </div>
+        </div>
+ 
+        <div class="card" style="box-shadow:none;background:#f8fafc;margin-bottom:14px;">
+          <h3 style="margin-top:0;">Reporting Covenants</h3>
+          <div class="grid">
+            <div><label>Annual Financial Statements</label><select id="covAnnualFS"><option>Required — within 120 days of fiscal year end</option><option>Required — within 90 days</option><option>Waived</option></select></div>
+            <div><label>Annual Tax Returns</label><select id="covTaxReturn"><option>Required — within 30 days of filing</option><option>Required — by April 30 each year</option><option>Waived</option></select></div>
+            <div><label>Quarterly Management Accounts</label><select id="covQuarterly"><option>Required — within 45 days of quarter end</option><option>Not required</option><option>Lender discretion</option></select></div>
+            <div><label>Borrowing Base Certificate</label><select id="covBBC"><option>Monthly — if A/R or inventory pledged</option><option>Quarterly</option><option>Not applicable</option></select></div>
+          </div>
+        </div>
+ 
+        <div class="card" style="box-shadow:none;background:#f8fafc;">
+          <h3 style="margin-top:0;">Negative Covenants (restrictions on borrower)</h3>
+          <div class="grid">
+            <div><label>Additional Secured Debt</label><select id="covNoDebt"><option>Prohibited without lender consent</option><option>Permitted up to defined threshold</option></select></div>
+            <div><label>Asset Disposals</label><select id="covAssets"><option>Prohibited without lender consent</option><option>Permitted — ordinary course of business only</option></select></div>
+            <div><label>Change of Ownership / Control</label><select id="covOwnership"><option>Prohibited — triggers acceleration</option><option>Permitted with lender approval</option></select></div>
+            <div><label>Additional Liens on Collateral</label><select id="covLiens"><option>Prohibited without lender consent</option><option>Junior liens permitted</option></select></div>
+          </div>
+        </div>
+      </section>
+
+      
+      
       <section id="compliance" class="card hidden">
         <h2>Compliance & Risk</h2>
         <ul class="checklist">
@@ -351,6 +495,9 @@
     </main>
   </div>
 
+
+
+  
   <script>
     function showSection(id, btn) {
       document.querySelectorAll('main section').forEach(s => s.classList.add('hidden'));
@@ -379,11 +526,11 @@
       if (debt    < income)  score += 10;
       if (bank    >  50000)  score +=  8;
       if (years   >=     2)  score += 10;
-      if      (fico >= 800)             score += 15;
-      else if (fico >= 750)             score += 12;
-      else if (fico >= 700)             score +=  8;
-      else if (fico >= 650)             score +=  4;
-      else if (fico > 0 && fico < 600)  score -= 10;
+      if      (fico >= 800)            score += 15;
+      else if (fico >= 750)            score += 12;
+      else if (fico >= 700)            score +=  8;
+      else if (fico >= 650)            score +=  4;
+      else if (fico > 0 && fico < 600) score -= 10;
       score = Math.min(95, Math.max(20, score));
  
       document.getElementById('dashScore').innerText  = score + ' / 100';
@@ -395,48 +542,86 @@
     }
  
     function generateCreditMemo() {
-      const name        = document.getElementById('name').value;
-      const email       = document.getElementById('email').value;
-      const ownership   = document.getElementById('ownership').value;
-      const address     = document.getElementById('address').value;
-      const ficoScore   = document.getElementById('ficoScore').value;
+      const name         = document.getElementById('name').value;
+      const email        = document.getElementById('email').value;
+      const ownership    = document.getElementById('ownership').value;
+      const address      = document.getElementById('address').value;
+      const ficoScore    = document.getElementById('ficoScore').value;
       const creditBureau = document.getElementById('creditBureau').value;
-      const pullType    = document.getElementById('pullType').value;
-      const biz         = document.getElementById('bizName').value;
-      const industry    = document.getElementById('industry').value;
-      const years       = document.getElementById('years').value;
-      const program     = document.getElementById('program').value;
-      const amount      = Number(document.getElementById('amount').value || 0);
-      const funds       = document.getElementById('funds').value;
-      const revenue     = Number(document.getElementById('revenue').value || 0);
-      const income      = Number(document.getElementById('income').value  || 0);
-      const debt        = Number(document.getElementById('debt').value    || 0);
-      const bank        = Number(document.getElementById('bank').value    || 0);
-      const debtService = Number(document.getElementById('debtService').value || 0);
-      const currentLiabilities = Number(document.getElementById('currentLiabilities').value || 0);
-      const authBy      = document.getElementById('authBy').value;
-      const authDate    = document.getElementById('authDate').value;
-      const notes       = document.getElementById('complianceNotes').value;
-      const score       = calculateScore();
-      const debtToIncome = income > 0 ? (debt / income).toFixed(2) + 'x' : 'N/A';
-      const margin       = revenue > 0 ? ((income / revenue) * 100).toFixed(1) + '%' : 'N/A';
+      const pullType     = document.getElementById('pullType').value;
+      const biz          = document.getElementById('bizName').value;
+      const industry     = document.getElementById('industry').value;
+      const years        = document.getElementById('years').value;
+      const program      = document.getElementById('program').value;
+      const amount       = Number(document.getElementById('amount').value || 0);
+      const funds        = document.getElementById('funds').value;
+      const revenue      = Number(document.getElementById('revenue').value || 0);
+      const income       = Number(document.getElementById('income').value  || 0);
+      const debt         = Number(document.getElementById('debt').value    || 0);
+      const bank         = Number(document.getElementById('bank').value    || 0);
+      const debtService  = Number(document.getElementById('debtService').value || 0);
+      const currentLiab  = Number(document.getElementById('currentLiabilities').value || 0);
+      const authBy       = document.getElementById('authBy').value;
+      const authDate     = document.getElementById('authDate').value;
+      const notes        = document.getElementById('complianceNotes').value;
  
+      const arTotal          = Number(document.getElementById('arTotal').value || 0);
+      const eligibleAR       = Number(document.getElementById('eligibleAR').value || 0);
+      const inventoryValue   = Number(document.getElementById('inventoryValue').value || 0);
+      const eligibleInventory= Number(document.getElementById('eligibleInventory').value || 0);
  
-      const freeCashFlow = income - debtService;
+      const totalEquity     = Number(document.getElementById('totalEquity').value || 0);
+      const totalAssets     = Number(document.getElementById('totalAssets').value || 0);
+      const totalLiabilities= Number(document.getElementById('totalLiabilities').value || 0);
  
-      const dscr = debtService > 0 ? (income / debtService).toFixed(2) + 'x' : 'N/A';
-      const dscrStatus = debtService > 0
-        ? (income / debtService) >= 1.25
-          ? 'Meets typical SBA minimum (1.25x)'
-          : 'Below typical SBA minimum (1.25x) — flag for review'
-        : 'N/A — no debt service entered';
+      const colREAddress  = document.getElementById('colREAddress').value;
+      const colREValue    = Number(document.getElementById('colREValue').value || 0);
+      const colREMortgage = Number(document.getElementById('colREMortgage').value || 0);
+      const colREEquity   = Number(document.getElementById('colREEquity').value || 0);
+      const colRELien     = document.getElementById('colRELien').value;
+      const colARPledged  = Number(document.getElementById('colARPledged').value || 0);
+      const colARRate     = Number(document.getElementById('colARRate').value || 80);
+      const colInvPledged = Number(document.getElementById('colInvPledged').value || 0);
+      const colInvRate    = Number(document.getElementById('colInvRate').value || 50);
+      const colPersonalRE = Number(document.getElementById('colPersonalRE').value || 0);
+      const colPersonalMtg= Number(document.getElementById('colPersonalMtg').value || 0);
+      const colPersonalOther= Number(document.getElementById('colPersonalOther').value || 0);
  
-      const currentRatio = currentLiabilities > 0 ? (bank / currentLiabilities).toFixed(2) + 'x' : 'N/A';
-      const liquidityStatus = currentLiabilities > 0
-        ? (bank / currentLiabilities) >= 1
-          ? 'Adequate short-term liquidity'
-          : 'Limited short-term liquidity — flag for review'
-        : 'N/A — no current liabilities entered';
+      const guar1Name      = document.getElementById('guar1Name').value;
+      const guar1Type      = document.getElementById('guar1Type').value;
+      const guar1NetWorth  = Number(document.getElementById('guar1NetWorth').value || 0);
+      const sbaGrntPct     = document.getElementById('sbaGrntPct').value;
+      const sbaGrntAmt     = Number(document.getElementById('sbaGrntAmt').value || 0);
+ 
+      const covDSCR        = document.getElementById('covDSCR').value;
+      const covCurrentRatio= document.getElementById('covCurrentRatio').value;
+      const covDebtEquity  = document.getElementById('covDebtEquity').value;
+      const covAnnualFS    = document.getElementById('covAnnualFS').value;
+      const covTaxReturn   = document.getElementById('covTaxReturn').value;
+      const covNoDebt      = document.getElementById('covNoDebt').value;
+      const covOwnership   = document.getElementById('covOwnership').value;
+ 
+      const score         = calculateScore();
+      const debtToIncome  = income > 0 ? (debt / income).toFixed(2) + 'x' : 'N/A';
+      const margin        = revenue > 0 ? ((income / revenue) * 100).toFixed(1) + '%' : 'N/A';
+      const freeCashFlow  = income - debtService;
+      const dscr          = debtService > 0 ? (income / debtService).toFixed(2) + 'x' : 'N/A';
+      const dscrStatus    = debtService > 0 ? ((income / debtService) >= 1.25 ? 'Meets SBA minimum (1.25x)' : 'Below SBA minimum — flag for review') : 'N/A';
+      const currentRatio  = currentLiab > 0 ? (bank / currentLiab).toFixed(2) + 'x' : 'N/A';
+      const liquidityStatus = currentLiab > 0 ? ((bank / currentLiab) >= 1 ? 'Adequate short-term liquidity' : 'Limited — flag for review') : 'N/A';
+ 
+      const debtToEquity   = totalEquity > 0 ? (totalLiabilities / totalEquity).toFixed(2) + 'x' : 'N/A';
+      const debtToAssets   = totalAssets > 0 ? ((totalLiabilities / totalAssets) * 100).toFixed(1) + '%' : 'N/A';
+      const equityRatio    = totalAssets > 0 ? ((totalEquity / totalAssets) * 100).toFixed(1) + '%' : 'N/A';
+ 
+      const arBorrowBase  = eligibleAR > 0 ? eligibleAR * 0.80 : 0;
+      const invBorrowBase = eligibleInventory > 0 ? eligibleInventory * 0.50 : 0;
+      const totalBorrowBase = arBorrowBase + invBorrowBase;
+ 
+      const colARValue    = colARPledged * (colARRate / 100);
+      const colInvValue   = colInvPledged * (colInvRate / 100);
+      const colPersonalREEquity = colPersonalRE - colPersonalMtg;
+      const totalCollateral = colREEquity + colARValue + colInvValue + colPersonalREEquity + colPersonalOther;
  
       const recommendation = score >= 75
         ? 'Recommend conditional approval subject to final document validation and compliance clearance.'
@@ -456,6 +641,7 @@
           <tr><th>Application Type</th><th>Date</th><th>Approval Authority</th></tr>
           <tr><td>New SBA Loan Request</td><td>${new Date().toLocaleDateString()}</td><td>Credit Committee / SBA Lending Officer</td></tr>
         </table>
+ 
         <h2>Overview</h2>
         <table>
           <tr><th>Borrower</th><td>${biz}</td><th>Primary Contact</th><td>${name}</td></tr>
@@ -469,26 +655,21 @@
           <tr><th>Credit Authorized By</th><td>${authBy || 'N/A'}</td><th>Authorization Date</th><td>${authDate || 'N/A'}</td></tr>
           <tr><th>KYC Status</th><td>No issue - demo status</td><th>OFAC / Sanctions</th><td>Screening required before approval</td></tr>
         </table>
+ 
         <h2>Executive Summary</h2>
         <p>${biz} has requested a ${program} facility in the amount of ${money(amount)} for ${funds.toLowerCase()}. The borrower reports annual revenue of ${money(revenue)}, net income of ${money(income)}, existing business debt of ${money(debt)}, average bank balance of ${money(bank)}, and a demo FICO score of ${ficoScore} from ${creditBureau}. Based on the demo scoring model, the borrower receives a preliminary risk score of ${score}/100.</p>
+ 
         <h2>Summary Terms and Conditions</h2>
         <table>
           <tr><th>Facility Type</th><td>${program}</td></tr>
           <tr><th>Facility Amount</th><td>${money(amount)}</td></tr>
           <tr><th>Purpose</th><td>${funds}</td></tr>
           <tr><th>Repayment Source</th><td>Primary: operating cash flow. Secondary: owner support or collateral if required.</td></tr>
-          <tr><th>Collateral</th><td>To be determined based on SBA/lender requirements and final underwriting.</td></tr>
+          <tr><th>Collateral</th><td>${colREAddress ? colREAddress + ' — Est. Net Equity: ' + money(colREEquity) : 'To be determined per SBA/lender requirements'}</td></tr>
+          <tr><th>SBA Guaranty</th><td>${sbaGrntPct} — Guaranteed amount: ${sbaGrntAmt > 0 ? money(sbaGrntAmt) : 'To be calculated'}</td></tr>
           <tr><th>Conditions</th><td>Tax returns, bank statements, financial statements, KYC/CIP, OFAC screening, beneficial ownership verification, and SBA eligibility review.</td></tr>
         </table>
-        <h2>Guarantee and Covenants</h2>
-        <table>
-          <tr><th>Item</th><th>Requirement</th></tr>
-          <tr><td>Personal Guarantee</td><td>Required from all owners with ${ownership}% or greater ownership, per standard SBA requirements.</td></tr>
-          <tr><td>Minimum DSCR Covenant</td><td>Borrower to maintain a minimum DSCR of 1.25x, tested annually using year-end financial statements.</td></tr>
-          <tr><td>Reporting Covenant</td><td>Annual financial statements and tax returns to be submitted within 120 days of fiscal year end.</td></tr>
-          <tr><td>Negative Covenant</td><td>Borrower may not incur additional secured debt without prior lender consent.</td></tr>
-          <tr><td>Insurance Covenant</td><td>Borrower to maintain adequate business insurance and name lender as loss payee where applicable.</td></tr>
-        </table>
+ 
         <h2>Business & Financial Analysis</h2>
         <p>The borrower operates in the ${industry} sector and has been in business for approximately ${years} year(s). Net profit margin is ${margin}. Debt-to-income ratio is ${debtToIncome}.</p>
         <table>
@@ -496,30 +677,90 @@
           <tr><td>Debt Service Coverage Ratio (DSCR)</td><td>${dscr}</td><td>${dscrStatus}</td></tr>
           <tr><td>Free Cash Flow (Annual)</td><td>${money(freeCashFlow)}</td><td>Net income less annual debt service</td></tr>
         </table>
+ 
+        <h2>Borrowing Base Analysis</h2>
+        <table>
+          <tr><th>Item</th><th>Total Value</th><th>Eligible Amount</th><th>Advance Rate</th><th>Borrowing Base</th></tr>
+          <tr><td>Accounts Receivable</td><td>${money(arTotal)}</td><td>${money(eligibleAR)}</td><td>80%</td><td>${money(arBorrowBase)}</td></tr>
+          <tr><td>Inventory</td><td>${money(inventoryValue)}</td><td>${money(eligibleInventory)}</td><td>50%</td><td>${money(invBorrowBase)}</td></tr>
+          <tr><th colspan="4">Total Borrowing Base</th><td><strong>${money(totalBorrowBase)}</strong></td></tr>
+        </table>
+ 
+        <h2>Debt / Equity Metrics</h2>
+        <table>
+          <tr><th>Metric</th><th>Value</th><th>Assessment</th></tr>
+          <tr><td>Total Assets</td><td>${money(totalAssets)}</td><td>Per borrower-reported balance sheet</td></tr>
+          <tr><td>Total Liabilities</td><td>${money(totalLiabilities)}</td><td>Per borrower-reported balance sheet</td></tr>
+          <tr><td>Total Equity (Net Worth)</td><td>${money(totalEquity)}</td><td>Assets minus liabilities</td></tr>
+          <tr><td>Debt / Equity Ratio</td><td>${debtToEquity}</td><td>${debtToEquity !== 'N/A' && parseFloat(debtToEquity) <= 3 ? 'Within acceptable range (≤ 3.00x)' : debtToEquity !== 'N/A' ? 'Elevated — flag for review (> 3.00x)' : 'N/A'}</td></tr>
+          <tr><td>Debt / Total Assets</td><td>${debtToAssets}</td><td>Leverage ratio — % of assets funded by debt</td></tr>
+          <tr><td>Equity Ratio</td><td>${equityRatio}</td><td>% of assets funded by owner equity</td></tr>
+        </table>
+ 
         <h2>Liquidity Analysis</h2>
-        <p>The borrower reports an average bank balance of ${money(bank)} against current liabilities of ${money(currentLiabilities)}, yielding a current ratio of ${currentRatio}. ${liquidityStatus}. This indicates the borrower's ability to meet short-term obligations using available liquid assets and should be confirmed against verified bank statements and balance sheet data.</p>
+        <p>The borrower reports an average bank balance of ${money(bank)} against current liabilities of ${money(currentLiab)}, yielding a current ratio of ${currentRatio}. ${liquidityStatus}.</p>
         <table>
           <tr><th>Metric</th><th>Value</th></tr>
           <tr><td>Average Bank Balance</td><td>${money(bank)}</td></tr>
-          <tr><td>Current Liabilities (Due within 1 Year)</td><td>${money(currentLiabilities)}</td></tr>
+          <tr><td>Current Liabilities (Due within 1 Year)</td><td>${money(currentLiab)}</td></tr>
           <tr><td>Current Ratio</td><td>${currentRatio}</td></tr>
         </table>
+ 
+        <h2>Collateral Summary</h2>
+        <table>
+          <tr><th>Collateral Type</th><th>Gross Value</th><th>Net / Eligible Value</th></tr>
+          <tr><td>Real Estate — ${colREAddress || 'Not specified'} (${colRELien})</td><td>${money(colREValue)}</td><td>${money(colREEquity)}</td></tr>
+          <tr><td>Eligible A/R (at ${colARRate}% advance rate)</td><td>${money(colARPledged)}</td><td>${money(colARValue)}</td></tr>
+          <tr><td>Eligible Inventory (at ${colInvRate}% advance rate)</td><td>${money(colInvPledged)}</td><td>${money(colInvValue)}</td></tr>
+          <tr><td>Personal Real Estate (net of mortgage)</td><td>${money(colPersonalRE)}</td><td>${money(colPersonalREEquity)}</td></tr>
+          <tr><td>Other Personal Assets</td><td>${money(colPersonalOther)}</td><td>${money(colPersonalOther)}</td></tr>
+          <tr><th colspan="2">Total Estimated Collateral Coverage</th><td><strong>${money(totalCollateral)}</strong></td></tr>
+        </table>
+ 
+        <h2>Guaranty</h2>
+        <table>
+          <tr><th>Item</th><th>Detail</th></tr>
+          <tr><td>Primary Guarantor</td><td>${guar1Name || 'Not specified'} — ${guar1Type}</td></tr>
+          <tr><td>Guarantor Net Worth</td><td>${money(guar1NetWorth)}</td></tr>
+          <tr><td>SBA Guaranty Coverage</td><td>${sbaGrntPct} — ${sbaGrntAmt > 0 ? money(sbaGrntAmt) : 'To be calculated'}</td></tr>
+          <tr><td>Personal Guarantee Basis</td><td>Required per 13 CFR § 120.160 from all owners with 20%+ equity</td></tr>
+        </table>
+ 
+        <h2>Financial Covenants</h2>
+        <table>
+          <tr><th>Covenant</th><th>Requirement</th></tr>
+          <tr><td>Minimum DSCR</td><td>${covDSCR} — tested annually</td></tr>
+          <tr><td>Minimum Current Ratio</td><td>${covCurrentRatio} — tested annually</td></tr>
+          <tr><td>Maximum Debt / Equity Ratio</td><td>${covDebtEquity} — tested annually</td></tr>
+          <tr><td>Annual Financial Statements</td><td>${covAnnualFS}</td></tr>
+          <tr><td>Annual Tax Returns</td><td>${covTaxReturn}</td></tr>
+          <tr><td>Additional Secured Debt</td><td>${covNoDebt}</td></tr>
+          <tr><td>Change of Ownership / Control</td><td>${covOwnership}</td></tr>
+        </table>
+ 
         <h2>Credit Profile</h2>
         <p>Demo FICO score of ${ficoScore} from ${creditBureau}, pull type: ${pullType}. In production, credit data must be obtained through an approved bureau API with borrower consent.</p>
+ 
         <h2>Strengths</h2>
         <ul>
           <li>Complete business and ownership profile provided for initial SBA screening.</li>
           <li>Reported annual revenue of ${money(revenue)} supports further cash-flow analysis.</li>
           <li>Average bank balance of ${money(bank)} may support liquidity, subject to verification.</li>
+          ${totalBorrowBase > 0 ? '<li>Borrowing base of ' + money(totalBorrowBase) + ' provides asset-level support for the requested facility.</li>' : ''}
+          ${totalEquity > 0 && parseFloat(debtToEquity) <= 3 ? '<li>Debt/equity ratio of ' + debtToEquity + ' is within acceptable range.</li>' : ''}
         </ul>
+ 
         <h2>Weaknesses / Risks and Mitigants</h2>
         <table>
           <tr><th>Risk</th><th>Mitigant / Required Action</th></tr>
-          <tr><td>Financial data is borrower-entered and not yet verified.</td><td>Validate against tax returns, bank statements, P&amp;L, and debt schedule.</td></tr>
+          <tr><td>Financial data is borrower-entered and not yet verified.</td><td>Validate against tax returns, bank statements, P&L, and debt schedule.</td></tr>
           <tr><td>Existing debt may pressure repayment capacity.</td><td>Calculate DSCR using verified EBITDA and confirm repayment source.</td></tr>
           <tr><td>Compliance review is not final.</td><td>Complete KYC, OFAC, beneficial ownership, fraud, and adverse media checks.</td></tr>
           <tr><td>SBA eligibility is not final.</td><td>Confirm use of proceeds, ownership, business size, and SBA certifications.</td></tr>
+          ${totalEquity > 0 && parseFloat(debtToEquity) > 3 ? '<tr><td>Elevated debt/equity ratio (' + debtToEquity + ').</td><td>Require additional equity injection or credit enhancement.</td></tr>' : ''}
+          ${dscr !== 'N/A' && parseFloat(dscr) < 1.25 ? '<tr><td>DSCR below SBA minimum of 1.25x (current: ' + dscr + ').</td><td>Require additional collateral or guarantor support.</td></tr>' : ''}
         </table>
+ 
         <h2>Compliance Review</h2>
         <table>
           <tr><th>Control</th><th>Status</th></tr>
@@ -528,10 +769,11 @@
           <tr><td>Beneficial Ownership</td><td>Required for owners meeting applicable threshold</td></tr>
           <tr><td>Fraud / Adverse Media</td><td>Pending review</td></tr>
           <tr><td>SBA Eligibility</td><td>Pending final certification</td></tr>
-          <tr><td>FCRA / Credit Consent</td><td>Demo only - production requires borrower consent and approved bureau access</td></tr>
+          <tr><td>FCRA / Credit Consent</td><td>Demo only — production requires borrower consent and approved bureau access</td></tr>
           <tr><td>Credit Authorization</td><td>${authBy ? 'Authorized by ' + authBy + ' on ' + authDate : 'Pending authorization'}</td></tr>
         </table>
         ${notes ? `<h2>Compliance Review Notes / Result Analysis</h2><p>${notes}</p>` : ''}
+ 
         <h2>Preliminary Recommendation</h2>
         <p><strong>${recommendation}</strong></p>
         <p>This memo is system-generated for demo purposes and should be reviewed by a credit analyst before any lending decision.</p>
@@ -551,6 +793,6 @@
       URL.revokeObjectURL(link.href);
     }
   </script>
-  
+ 
 </body>
 </html>
