@@ -3,516 +3,784 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SBA Loan Application Demo</title>
+  <title>SBA Loan Application</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #f4f7fb;
+      --bg: #f0f4ff;
       --card: #ffffff;
-      --text: #172033;
+      --text: #0f172a;
       --muted: #64748b;
-      --primary: #1d4ed8;
-      --primary2: #0f172a;
-      --green: #16a34a;
-      --yellow: #ca8a04;
-      --red: #dc2626;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --primary-light: #eff6ff;
+      --accent: #6366f1;
+      --green: #10b981;
+      --yellow: #f59e0b;
+      --red: #ef4444;
       --border: #e2e8f0;
+      --nav-w: 240px;
+      --radius: 16px;
+      --shadow: 0 4px 24px rgba(15,23,42,0.08);
+      --shadow-lg: 0 8px 40px rgba(15,23,42,0.13);
     }
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      background: linear-gradient(135deg, #eef4ff, #f8fafc);
+      font-family: 'Inter', Arial, sans-serif;
+      background: var(--bg);
       color: var(--text);
+      min-height: 100vh;
     }
+
+    /* ── HEADER ── */
     header {
-      background: linear-gradient(135deg, #0f172a, #1d4ed8);
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #2563eb 100%);
       color: white;
-      padding: 28px;
-    }
-    header h1 { margin: 0 0 8px; font-size: 32px; }
-    header p { margin: 0; color: #dbeafe; }
-    .container {
-      max-width: 1180px;
-      margin: 24px auto;
-      padding: 0 16px;
-      display: grid;
-      grid-template-columns: 260px 1fr;
-      gap: 20px;
-    }
-    nav {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 14px;
-      box-shadow: 0 10px 30px rgba(15,23,42,.08);
-      height: fit-content;
+      padding: 0 32px;
+      height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
       position: sticky;
-      top: 16px;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 20px rgba(15,23,42,0.25);
     }
+    .header-left { display: flex; align-items: center; gap: 14px; }
+    .header-icon {
+      width: 42px; height: 42px;
+      background: rgba(255,255,255,0.15);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+    header h1 { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
+    header p { font-size: 12px; color: rgba(255,255,255,0.6); margin-top: 1px; }
+    .header-badge {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 99px;
+      padding: 5px 14px;
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.9);
+      letter-spacing: 0.3px;
+    }
+
+    /* ── LAYOUT ── */
+    .app-shell {
+      display: grid;
+      grid-template-columns: var(--nav-w) 1fr;
+      min-height: calc(100vh - 72px);
+    }
+
+    /* ── SIDEBAR ── */
+    nav {
+      background: #0f172a;
+      padding: 20px 12px;
+      position: sticky;
+      top: 72px;
+      height: calc(100vh - 72px);
+      overflow-y: auto;
+    }
+    .nav-section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+      padding: 0 10px;
+      margin: 18px 0 6px;
+    }
+    .nav-section-label:first-child { margin-top: 4px; }
     nav button {
-      display: block;
+      display: flex;
+      align-items: center;
+      gap: 10px;
       width: 100%;
       border: 0;
       background: transparent;
-      padding: 13px 14px;
+      padding: 10px 12px;
       text-align: left;
-      border-radius: 12px;
+      border-radius: 10px;
       cursor: pointer;
-      color: var(--text);
-      font-weight: 600;
-      margin-bottom: 6px;
+      color: rgba(255,255,255,0.55);
+      font-weight: 500;
+      font-size: 13.5px;
+      font-family: inherit;
+      margin-bottom: 2px;
+      transition: all 0.15s;
     }
-    nav button.active, nav button:hover {
-      background: #dbeafe;
-      color: var(--primary);
+    nav button:hover { background: rgba(255,255,255,0.07); color: white; }
+    nav button.active {
+      background: linear-gradient(135deg, #2563eb, #4f46e5);
+      color: white;
+      box-shadow: 0 4px 12px rgba(37,99,235,0.35);
     }
+    .nav-icon { font-size: 15px; width: 18px; text-align: center; flex-shrink: 0; }
+    .nav-divider { height: 1px; background: rgba(255,255,255,0.07); margin: 12px 0; }
+
+    /* ── MAIN CONTENT ── */
     main {
-      display: grid;
-      gap: 18px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
     }
+
+    /* ── SECTION HEADER ── */
+    .section-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+    .section-icon {
+      width: 44px; height: 44px; flex-shrink: 0;
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px;
+    }
+    .section-icon.blue { background: linear-gradient(135deg, #dbeafe, #bfdbfe); }
+    .section-icon.purple { background: linear-gradient(135deg, #ede9fe, #ddd6fe); }
+    .section-icon.green { background: linear-gradient(135deg, #d1fae5, #a7f3d0); }
+    .section-icon.orange { background: linear-gradient(135deg, #fed7aa, #fdba74); }
+    .section-icon.red { background: linear-gradient(135deg, #fee2e2, #fecaca); }
+    .section-icon.teal { background: linear-gradient(135deg, #ccfbf1, #99f6e4); }
+    .section-icon.indigo { background: linear-gradient(135deg, #e0e7ff, #c7d2fe); }
+    .section-title h2 { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
+    .section-title p { font-size: 13px; color: var(--muted); margin-top: 3px; }
+
+    /* ── CARDS ── */
     .card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 22px;
-      padding: 22px;
-      box-shadow: 0 10px 30px rgba(15,23,42,.08);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow);
     }
-    .card h2 { margin-top: 0; }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 14px;
+    .card + .card { margin-top: 16px; }
+    .sub-card {
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 18px;
+      margin-top: 16px;
     }
-    label {
+    .sub-card h3 {
       font-size: 13px;
       font-weight: 700;
-      color: #334155;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+    .sub-card h3::before {
+      content: '';
+      display: inline-block;
+      width: 3px; height: 14px;
+      background: var(--primary);
+      border-radius: 99px;
+    }
+
+    /* ── GRID ── */
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+
+    /* ── FORM ELEMENTS ── */
+    .field label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #475569;
+      display: block;
+      margin-bottom: 6px;
+      letter-spacing: 0.02em;
+    }
+    label {
+      font-size: 12px;
+      font-weight: 600;
+      color: #475569;
       display: block;
       margin-bottom: 6px;
     }
     input, select, textarea {
       width: 100%;
-      padding: 12px;
-      border: 1px solid var(--border);
-      border-radius: 12px;
+      padding: 10px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 10px;
       font-size: 14px;
+      font-family: inherit;
       background: white;
+      color: var(--text);
+      transition: border-color 0.15s, box-shadow 0.15s;
+      outline: none;
     }
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(37,99,235,0.1);
+    }
+    input::placeholder, textarea::placeholder { color: #94a3b8; }
     textarea { min-height: 100px; resize: vertical; }
+    small.hint { display: block; margin-top: 5px; font-size: 11px; color: var(--muted); }
+
+    /* ── BUTTONS ── */
     .btn {
-      background: var(--primary);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
       color: white;
       border: 0;
-      padding: 13px 18px;
-      border-radius: 14px;
-      font-weight: 700;
+      padding: 11px 20px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 14px;
+      font-family: inherit;
       cursor: pointer;
-      margin-top: 14px;
+      margin-top: 16px;
+      box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+      transition: opacity 0.15s, transform 0.1s;
     }
-    .btn.secondary {
-      background: #0f172a;
-    }
-    .row {
-      display: flex;
-      gap: 12px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
-    .pill {
-      display: inline-flex;
-      padding: 7px 10px;
-      border-radius: 999px;
-      background: #e0f2fe;
-      color: #075985;
-      font-weight: 700;
-      font-size: 12px;
-      margin: 4px;
-    }
+    .btn:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    .btn.dark { background: linear-gradient(135deg, #0f172a, #1e293b); box-shadow: 0 4px 12px rgba(15,23,42,0.3); }
+    .btn.outline { background: white; color: var(--primary); border: 1.5px solid var(--primary); box-shadow: none; }
+    .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 16px; }
+
+    /* ── DASHBOARD METRICS ── */
+    .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
     .metric {
-      padding: 18px;
-      border-radius: 18px;
-      background: #f8fafc;
+      background: white;
       border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      position: relative;
+      overflow: hidden;
     }
-    .metric strong {
-      font-size: 28px;
-      display: block;
+    .metric::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
     }
-    .score {
-      height: 18px;
-      background: #e5e7eb;
-      border-radius: 999px;
+    .metric.blue::before { background: linear-gradient(90deg, #2563eb, #6366f1); }
+    .metric.green::before { background: linear-gradient(90deg, #10b981, #059669); }
+    .metric.purple::before { background: linear-gradient(90deg, #8b5cf6, #6366f1); }
+    .metric.orange::before { background: linear-gradient(90deg, #f59e0b, #ef4444); }
+    .metric.teal::before { background: linear-gradient(90deg, #14b8a6, #06b6d4); }
+    .metric-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; }
+    .metric-value { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; margin: 6px 0 4px; color: var(--text); }
+    .metric-sub { font-size: 12px; color: var(--muted); }
+    .metric-icon { position: absolute; top: 18px; right: 18px; font-size: 22px; opacity: 0.15; }
+
+    /* ── SCORE BAR ── */
+    .score-track {
+      height: 8px;
+      background: #e2e8f0;
+      border-radius: 99px;
       overflow: hidden;
       margin-top: 10px;
     }
-    .score div {
+    .score-fill {
       height: 100%;
       width: 72%;
-      background: linear-gradient(90deg, #16a34a, #1d4ed8);
+      background: linear-gradient(90deg, #10b981, #2563eb, #6366f1);
+      border-radius: 99px;
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     }
+
+    /* ── PILLS ── */
+    .pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--border); }
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .pill.blue { background: #dbeafe; color: #1d4ed8; }
+    .pill.green { background: #d1fae5; color: #065f46; }
+    .pill.yellow { background: #fef3c7; color: #92400e; }
+    .pill.red { background: #fee2e2; color: #991b1b; }
+    .pill.purple { background: #ede9fe; color: #5b21b6; }
+
+    /* ── CHECKLIST ── */
+    .checklist { list-style: none; padding: 0; }
     .checklist li {
-      margin: 10px 0;
-      padding: 12px;
-      background: #f8fafc;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 8px;
       border: 1px solid var(--border);
-      border-radius: 12px;
-      list-style: none;
+      background: #f8fafc;
+      transition: background 0.15s;
     }
+    .checklist li:hover { background: #f1f5f9; }
+    .checklist li input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--primary); flex-shrink: 0; }
+
+    /* ── STATUS BADGES ── */
+    .status-ok { color: #059669; }
+    .status-warn { color: #d97706; }
+
+    /* ── MEMO OUTPUT ── */
     .hidden { display: none; }
-    .summary {
-      white-space: pre-line;
+    .memo-output {
       background: #0f172a;
-      color: #e5e7eb;
-      padding: 18px;
-      border-radius: 16px;
-      line-height: 1.5;
-      font-family: Arial, Helvetica, sans-serif;
+      border-radius: 14px;
+      padding: 20px;
+      margin-top: 16px;
+      min-height: 60px;
+    }
+    .memo-placeholder {
+      color: rgba(255,255,255,0.35);
+      font-size: 14px;
+      text-align: center;
+      padding: 30px 0;
     }
     .memo-paper {
       background: white;
       color: #111827;
-      border-radius: 14px;
-      padding: 22px;
-      white-space: normal;
-      line-height: 1.45;
+      border-radius: 10px;
+      padding: 28px;
+      line-height: 1.6;
     }
-    .memo-paper h1, .memo-paper h2, .memo-paper h3 { color: #0f172a; }
-    .memo-paper table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 10px 0 18px;
-      font-size: 13px;
-    }
-    .memo-paper th, .memo-paper td {
-      border: 1px solid #cbd5e1;
-      padding: 8px;
-      text-align: left;
-      vertical-align: top;
-    }
-    .memo-paper th { background: #e2e8f0; }
+    .memo-paper h1 { font-size: 20px; font-weight: 800; color: #0f172a; text-align: center; text-decoration: underline; margin-bottom: 20px; }
+    .memo-paper h2 { font-size: 14px; font-weight: 700; color: #0f172a; text-transform: uppercase; letter-spacing: 0.06em; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px; margin: 20px 0 10px; }
+    .memo-paper table { width: 100%; border-collapse: collapse; margin: 0 0 16px; font-size: 13px; }
+    .memo-paper th, .memo-paper td { border: 1px solid #e2e8f0; padding: 8px 12px; text-align: left; vertical-align: top; }
+    .memo-paper th { background: #f8fafc; font-weight: 700; color: #374151; }
+    .memo-paper ul { padding-left: 18px; }
+    .memo-paper ul li { margin: 6px 0; font-size: 13px; }
+
+    /* ── SECTION PANEL ── */
+    .section-panel { display: none; }
+    .section-panel.active { display: block; }
+
+    /* ── PRINT ── */
     @media print {
-      body { background: white; }
-      header, nav, .row { display:none !important; }
-      .container { display:block; max-width:100%; margin:0; padding:0; }
-      .card { box-shadow:none; border:0; }
-      main section { display:none !important; }
-      #underwriting { display:block !important; }
-      .summary { background:white; color:black; padding:0; }
+      header, nav, .row, .section-header { display: none !important; }
+      .app-shell { display: block; }
+      main { padding: 0; }
+      .section-panel { display: none !important; }
+      #panel-underwriting { display: block !important; }
+      .memo-output { background: white; padding: 0; }
     }
-    @media (max-width: 850px) {
-      .container { grid-template-columns: 1fr; }
-      nav { position: static; }
-      .grid { grid-template-columns: 1fr; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .app-shell { grid-template-columns: 1fr; }
+      nav { position: static; height: auto; display: flex; flex-wrap: wrap; gap: 4px; padding: 12px; }
+      nav button { width: auto; }
+      .metrics-grid { grid-template-columns: repeat(2,1fr); }
+      .grid-3 { grid-template-columns: repeat(2,1fr); }
+    }
+    @media (max-width: 600px) {
+      .grid, .grid-3 { grid-template-columns: 1fr; }
+      .metrics-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
+
   <header>
-    <h1>🏦 SBA Loan Application Demo</h1>
-    <p>Bank-style loan intake, compliance screening, document checklist, and underwriting summary.</p>
+    <div class="header-left">
+      <div class="header-icon">🏦</div>
+      <div>
+        <h1>SBA Loan Application</h1>
+        <p>Bank-style underwriting · Compliance · Credit Memo Generator</p>
+      </div>
+    </div>
+    <div class="header-badge">Demo v2.0</div>
   </header>
 
-  <div class="container">
-   <nav>
-      <button class="active" onclick="showSection('dashboard', this)">Dashboard</button>
-      <button onclick="showSection('borrower', this)">Borrower Info</button>
-      <button onclick="showSection('business', this)">Business Info</button>
-      <button onclick="showSection('loan', this)">Loan Request</button>
-      <button onclick="showSection('financials', this)">Financials</button>
-      <button onclick="showSection('collateral', this)">Collateral</button>
-      <button onclick="showSection('guaranty', this)">Guaranty</button>
-      <button onclick="showSection('covenants', this)">Financial Covenants</button>
-      <button onclick="showSection('compliance', this)">Compliance & Risk</button>
-      <button onclick="showSection('documents', this)">Documents</button>
-      <button onclick="showSection('underwriting', this)">Generate Credit Memo</button>
+  <div class="app-shell">
+
+    <nav>
+      <div class="nav-section-label">Overview</div>
+      <button class="active" onclick="showSection('dashboard', this)"><span class="nav-icon">📊</span> Dashboard</button>
+
+      <div class="nav-section-label">Application</div>
+      <button onclick="showSection('borrower', this)"><span class="nav-icon">👤</span> Borrower Info</button>
+      <button onclick="showSection('business', this)"><span class="nav-icon">🏢</span> Business Info</button>
+      <button onclick="showSection('loan', this)"><span class="nav-icon">💰</span> Loan Request</button>
+      <button onclick="showSection('financials', this)"><span class="nav-icon">📈</span> Financials</button>
+
+      <div class="nav-section-label">Credit Analysis</div>
+      <button onclick="showSection('collateral', this)"><span class="nav-icon">🔒</span> Collateral</button>
+      <button onclick="showSection('guaranty', this)"><span class="nav-icon">🛡️</span> Guaranty</button>
+      <button onclick="showSection('covenants', this)"><span class="nav-icon">📋</span> Fin. Covenants</button>
+
+      <div class="nav-section-label">Review</div>
+      <button onclick="showSection('compliance', this)"><span class="nav-icon">✅</span> Compliance & Risk</button>
+      <button onclick="showSection('documents', this)"><span class="nav-icon">📁</span> Documents</button>
+
+      <div class="nav-divider"></div>
+      <button onclick="showSection('underwriting', this)" style="background:rgba(37,99,235,0.15);color:#93c5fd;"><span class="nav-icon">⚡</span> Credit Memo</button>
     </nav>
 
     <main>
-      <section id="dashboard" class="card">
-        <h2>Application Dashboard</h2>
-        <div class="grid">
-          <div class="metric"><span>Status</span><strong>In Review</strong><p>Current stage: Pre-underwriting</p></div>
-          <div class="metric"><span>Risk Score</span><strong id="dashScore">72 / 100</strong><div class="score"><div id="scoreBar"></div></div></div>
-          <div class="metric"><span>Loan Program</span><strong id="dashProgram">SBA 7(a)</strong><p>Selected by applicant</p></div>
-          <div class="metric"><span>Requested Amount</span><strong id="dashAmount">$250,000</strong><p>Use of funds: Working capital</p></div>
-          <div class="metric"><span>FICO Score</span><strong id="dashFico">720</strong><p id="dashBureau">Experian • Soft Pull Demo</p></div>
-        </div>
-        <p>
-          <span class="pill">KYC Required</span>
-          <span class="pill">OFAC Screening</span>
-          <span class="pill">Cash Flow Review</span>
-          <span class="pill">Document Validation</span>
-        </p>
-      </section>
 
-      <section id="borrower" class="card hidden">
-        <h2>Borrower Information</h2>
-        <div class="grid">
-          <div><label>Full Legal Name</label><input id="name" value="Syed Asif"></div>
-          <div><label>Email</label><input id="email" value="borrower@example.com"></div>
-          <div><label>Phone</label><input value="+1 555 123 4567"></div>
-          <div style="grid-column:1/-1"><label>Borrower Address</label><input id="address" type="text"placeholder="Street Address, City, State, ZIP"></div>
-          <div><label>SSN (Demo Only)</label><input id="ssn" type="password"placeholder="XXX-XX-XXXX" maxlength="11"></div>
-          <div><label>Ownership %</label><input id="ownership" type="number" value="100"></div>
-          <div><label>FICO Score (Demo)</label><input id="ficoScore" type="number" value="720" min="300" max="850"></div>
-          <div><label>Credit Bureau</label><select id="creditBureau"><option>Experian</option><option>Equifax</option><option>TransUnion</option></select></div>
-          <div><label>Credit Pull Type</label><select id="pullType"><option>Soft Pull (Demo)</option><option>Hard Pull (Demo)</option><option>Manual Entry (Demo)</option></select></div>
-          <div><label>Citizenship / Residency</label><select><option>U.S. Citizen</option><option>Permanent Resident</option><option>Eligible Non-Citizen</option></select></div>
+      <div class="section-panel active" id="panel-dashboard">
+        <div class="section-header">
+          <div class="section-icon blue">📊</div>
+          <div class="section-title"><h2>Application Dashboard</h2><p>Real-time summary of application status, risk score, and key metrics</p></div>
         </div>
-      </section>
-
-      <section id="business" class="card hidden">
-        <h2>Business Information</h2>
-        <div class="grid">
-          <div><label>Business Name</label><input id="bizName" value="Asif Capital LLC"></div>
-          <div><label>EIN</label><input value="12-3456789"></div>
-          <div><label>Business Type</label><select><option>Sole Proprietorship</option><option>Partnership</option><option>Corporation - C corp</option><option>Corporation - S corp</option><option>Corporation - Benefit Corporation</option><option>Corporation - Nonprofit</option><option>LLC</option></select></div>
-          <div><label>Industry / NAICS</label><input id="industry" value="Finance / Compliance Technology"></div>
-          <div><label>Years in Business</label><input id="years" type="number" value="3"></div>
-          <div><label>Employees</label><input type="number" value="8"></div>
-        </div>
-      </section>
-
-      <section id="loan" class="card hidden">
-        <h2>Loan Request</h2>
-        <div class="grid">
-          <div><label>SBA Program</label><select id="program"><option>SBA 7(a)</option><option>SBA Express</option><option>SBA 504</option><option>Microloan</option></select></div>
-          <div><label>Loan Amount</label><input id="amount" type="number" value="150000" max="150000"></div>
-          <div><label>Use of Funds</label><select id="funds"><option>Working capital</option><option>Equipment</option><option>Inventory</option></select></div>
-          <div><label>Requested Term</label><select><option>5 years</option><option>7 years</option><option>10 years</option><option>15 years</option></select></div>
-        </div>
-      </section>
-
-      
-      <section id="financials" class="card hidden">
-        <h2>Financial Information</h2>
-        <div class="grid">
-          <div><label>Annual Revenue (Most Recent Year)</label><input id="revenue" type="number" value="950000"><small style="color:#64748b;margin-top:4px;display:block;">Use most recent fiscal year figures</small></div>
-          <div><label>Net Income</label><input id="income" type="number" value="145000"></div>
-          <div><label>Existing Business Debt</label><input id="debt" type="number" value="80000"></div>
-          <div><label>Average Bank Balance</label><input id="bank" type="number" value="120000"></div>
-          <div><label>Annual Debt Service (Payments)</label><input id="debtService" type="number" value="24000"><small style="color:#64748b;margin-top:4px;display:block;">Total annual principal + interest payments</small></div>
-          <div><label>Current Liabilities (Due within 1 Year)</label><input id="currentLiabilities" type="number" value="35000"></div>
-        </div>
- 
-        <div class="card" style="margin-top:18px;box-shadow:none;background:#f8fafc;">
-          <h3 style="margin-top:0;">Borrowing Base Information</h3>
-          <div class="grid">
-            <div><label>A/R Total</label><input id="arTotal" type="number" placeholder="Total accounts receivable outstanding"><small style="color:#64748b;margin-top:4px;display:block;">Gross A/R balance before eligibility adjustments</small></div>
-            <div><label>Eligible A/R</label><input id="eligibleAR" type="number" placeholder="Eligible accounts receivable"><small style="color:#64748b;margin-top:4px;display:block;">A/R ≤ 90 days, excluding concentration & ineligible accounts</small></div>
-            <div><label>Inventory Value</label><input id="inventoryValue" type="number" placeholder="Total inventory at cost"><small style="color:#64748b;margin-top:4px;display:block;">Total inventory value at lower of cost or market</small></div>
-            <div><label>Eligible Inventory</label><input id="eligibleInventory" type="number" placeholder="Eligible inventory value"><small style="color:#64748b;margin-top:4px;display:block;">Finished goods only, net of reserves and obsolete stock</small></div>
+        <div class="card">
+          <div class="metrics-grid">
+            <div class="metric blue">
+              <div class="metric-icon">⚙️</div>
+              <div class="metric-label">Status</div>
+              <div class="metric-value" style="font-size:18px;">In Review</div>
+              <div class="metric-sub">Pre-underwriting stage</div>
+            </div>
+            <div class="metric green">
+              <div class="metric-icon">📊</div>
+              <div class="metric-label">Risk Score</div>
+              <div class="metric-value" id="dashScore">72 / 100</div>
+              <div class="score-track"><div class="score-fill" id="scoreBar"></div></div>
+            </div>
+            <div class="metric purple">
+              <div class="metric-icon">🏦</div>
+              <div class="metric-label">Loan Program</div>
+              <div class="metric-value" id="dashProgram" style="font-size:18px;">SBA 7(a)</div>
+              <div class="metric-sub">Selected by applicant</div>
+            </div>
+            <div class="metric orange">
+              <div class="metric-icon">💵</div>
+              <div class="metric-label">Requested Amount</div>
+              <div class="metric-value" id="dashAmount" style="font-size:22px;">$150,000</div>
+              <div class="metric-sub">Working capital</div>
+            </div>
+            <div class="metric teal">
+              <div class="metric-icon">💳</div>
+              <div class="metric-label">FICO Score</div>
+              <div class="metric-value" id="dashFico">720</div>
+              <div class="metric-sub" id="dashBureau">Experian • Soft Pull Demo</div>
+            </div>
+          </div>
+          <div class="pills">
+            <span class="pill blue">🔍 KYC Required</span>
+            <span class="pill red">🛑 OFAC Screening</span>
+            <span class="pill yellow">💰 Cash Flow Review</span>
+            <span class="pill purple">📄 Document Validation</span>
           </div>
         </div>
- 
-        <div class="card" style="margin-top:14px;box-shadow:none;background:#f8fafc;">
-          <h3 style="margin-top:0;">Debt / Equity Metrics</h3>
-          <div class="grid">
-            <div><label>Total Equity (Net Worth)</label><input id="totalEquity" type="number" placeholder="Total owner's equity / net worth"><small style="color:#64748b;margin-top:4px;display:block;">Total assets minus total liabilities</small></div>
-            <div><label>Total Assets</label><input id="totalAssets" type="number" placeholder="Total business assets"><small style="color:#64748b;margin-top:4px;display:block;">Current + fixed + other assets</small></div>
-            <div><label>Total Liabilities</label><input id="totalLiabilities" type="number" placeholder="Total business liabilities"><small style="color:#64748b;margin-top:4px;display:block;">Current + long-term liabilities</small></div>
-          </div>
-        </div>
- 
-        <button class="btn" onclick="calculateScore()">Calculate Risk Score</button>
-      </section>
+      </div>
 
+      <div class="section-panel" id="panel-borrower">
+        <div class="section-header">
+          <div class="section-icon blue">👤</div>
+          <div class="section-title"><h2>Borrower Information</h2><p>Personal details, identity, and credit profile of the primary applicant</p></div>
+        </div>
+        <div class="card">
+          <div class="grid">
+            <div><label>Full Legal Name</label><input id="name" value="Syed Asif"></div>
+            <div><label>Email</label><input id="email" value="borrower@example.com"></div>
+            <div><label>Phone</label><input value="+1 555 123 4567"></div>
+            <div><label>Ownership %</label><input id="ownership" type="number" value="100"></div>
+            <div style="grid-column:1/-1"><label>Borrower Address</label><input id="address" type="text" placeholder="Street Address, City, State, ZIP"></div>
+            <div><label>SSN (Demo Only)</label><input id="ssn" type="password" placeholder="XXX-XX-XXXX" maxlength="11"></div>
+            <div><label>Citizenship / Residency</label><select><option>U.S. Citizen</option><option>Permanent Resident</option><option>Eligible Non-Citizen</option></select></div>
+          </div>
+          <div class="sub-card" style="margin-top:20px;">
+            <h3>Credit Profile</h3>
+            <div class="grid">
+              <div><label>FICO Score (Demo)</label><input id="ficoScore" type="number" value="720" min="300" max="850"></div>
+              <div><label>Credit Bureau</label><select id="creditBureau"><option>Experian</option><option>Equifax</option><option>TransUnion</option></select></div>
+              <div><label>Credit Pull Type</label><select id="pullType"><option>Soft Pull (Demo)</option><option>Hard Pull (Demo)</option><option>Manual Entry (Demo)</option></select></div>
+            </div>
+          </div>
+        </div>
+      </div>
 
-      
-      <section id="collateral" class="card hidden">
-        <h2>Collateral</h2>
- 
-        <div class="card" style="box-shadow:none;background:#f8fafc;margin-bottom:14px;">
-          <h3 style="margin-top:0;">Real Estate</h3>
+      <div class="section-panel" id="panel-business">
+        <div class="section-header">
+          <div class="section-icon purple">🏢</div>
+          <div class="section-title"><h2>Business Information</h2><p>Company profile, legal structure, and operating history</p></div>
+        </div>
+        <div class="card">
           <div class="grid">
-            <div><label>Property Address</label><input id="colREAddress" type="text" placeholder="Address of collateral property"></div>
-            <div><label>Property Type</label><select id="colREType"><option>Owner-Occupied Commercial</option><option>Investment / Rental</option><option>Primary Residence</option><option>Vacant Land</option></select></div>
-            <div><label>Appraised Value ($)</label><input id="colREValue" type="number" placeholder="Most recent appraisal value"></div>
-            <div><label>Outstanding Mortgage ($)</label><input id="colREMortgage" type="number" placeholder="Remaining mortgage balance"></div>
-            <div><label>Estimated Net Equity ($)</label><input id="colREEquity" type="number" placeholder="Appraised value minus mortgage"></div>
-            <div><label>Lien Position</label><select id="colRELien"><option>1st Lien</option><option>2nd Lien</option><option>3rd Lien</option></select></div>
+            <div><label>Business Name</label><input id="bizName" value="Asif Capital LLC"></div>
+            <div><label>EIN</label><input value="12-3456789"></div>
+            <div><label>Business Structure</label><select><option>Sole Proprietorship</option><option>Partnership</option><option>Corporation</option><option>S Corporation</option><option>LLC</option></select></div>
+            <div><label>Industry / NAICS</label><input id="industry" value="Finance / Compliance Technology"></div>
+            <div><label>Years in Business</label><input id="years" type="number" value="3"></div>
+            <div><label>Employees</label><input type="number" value="8"></div>
           </div>
         </div>
- 
-        <div class="card" style="box-shadow:none;background:#f8fafc;margin-bottom:14px;">
-          <h3 style="margin-top:0;">Equipment & Machinery</h3>
-          <div class="grid">
-            <div><label>Equipment Description</label><input id="colEquipDesc" type="text" placeholder="Type and description of equipment"></div>
-            <div><label>Year / Make / Model</label><input id="colEquipYear" type="text" placeholder="e.g. 2021 Caterpillar 320"></div>
-            <div><label>Forced Liquidation Value ($)</label><input id="colEquipFLV" type="number" placeholder="FLV — value at forced sale"></div>
-            <div><label>Orderly Liquidation Value ($)</label><input id="colEquipOLV" type="number" placeholder="OLV — value in orderly sale"></div>
-          </div>
-        </div>
- 
-        <div class="card" style="box-shadow:none;background:#f8fafc;margin-bottom:14px;">
-          <h3 style="margin-top:0;">Business Assets (A/R & Inventory)</h3>
-          <div class="grid">
-            <div><label>Eligible A/R Pledged ($)</label><input id="colARPledged" type="number" placeholder="A/R pledged as collateral"></div>
-            <div><label>Advance Rate on A/R (%)</label><input id="colARRate" type="number" value="80" placeholder="Typical: 70–85%"></div>
-            <div><label>Eligible Inventory Pledged ($)</label><input id="colInvPledged" type="number" placeholder="Inventory pledged as collateral"></div>
-            <div><label>Advance Rate on Inventory (%)</label><input id="colInvRate" type="number" value="50" placeholder="Typical: 40–60%"></div>
-          </div>
-        </div>
- 
-        <div class="card" style="box-shadow:none;background:#f8fafc;">
-          <h3 style="margin-top:0;">Personal Assets</h3>
-          <div class="grid">
-            <div><label>Personal Real Estate Value ($)</label><input id="colPersonalRE" type="number" placeholder="Market value of personal property"></div>
-            <div><label>Personal RE Outstanding Mortgage ($)</label><input id="colPersonalMtg" type="number" placeholder="Remaining personal mortgage balance"></div>
-            <div><label>Other Personal Assets ($)</label><input id="colPersonalOther" type="number" placeholder="Vehicles, savings, investments, etc."></div>
-            <div><label>UCC-1 Filing Required</label><select id="colUCC"><option>Yes — All business assets</option><option>Yes — Specific assets only</option><option>No — Waived per SBA guidelines</option></select></div>
-          </div>
-        </div>
-      </section>
+      </div>
 
-      <section id="guaranty" class="card hidden">
-        <h2>Guaranty</h2>
- 
-        <div class="card" style="box-shadow:none;background:#f8fafc;margin-bottom:14px;">
-          <h3 style="margin-top:0;">Primary Guarantor</h3>
+      <div class="section-panel" id="panel-loan">
+        <div class="section-header">
+          <div class="section-icon green">💰</div>
+          <div class="section-title"><h2>Loan Request</h2><p>SBA program selection, requested amount, use of funds, and term</p></div>
+        </div>
+        <div class="card">
           <div class="grid">
-            <div><label>Guarantor Full Name</label><input id="guar1Name" type="text" placeholder="Full legal name of guarantor"></div>
-            <div><label>Ownership % in Business</label><input id="guar1Ownership" type="number" placeholder="e.g. 100"></div>
-            <div><label>Guaranty Type</label><select id="guar1Type"><option>Unlimited Personal Guaranty</option><option>Limited Guaranty — Maximum Liability</option><option>Limited Guaranty — Principal Reduction</option><option>Limited Guaranty — Percentage</option></select></div>
-            <div><label>Guaranty Amount ($)</label><input id="guar1Amount" type="number" placeholder="For limited guaranty — dollar cap"></div>
-            <div><label>Personal Net Worth ($)</label><input id="guar1NetWorth" type="number" placeholder="Guarantor total personal net worth"></div>
-            <div><label>SBA Form 413 (Personal Financial Statement)</label><select id="guar1Form413"><option>Received</option><option>Pending</option><option>Waived — Credit Score ≤ $500k</option></select></div>
+            <div><label>SBA Program</label><select id="program"><option>SBA 7(a)</option><option>SBA Express</option><option>SBA 504</option><option>Microloan</option></select></div>
+            <div><label>Loan Amount (Max $150,000)</label><input id="amount" type="number" value="150000" max="150000"></div>
+            <div><label>Use of Funds</label><select id="funds"><option>Working capital</option><option>Equipment</option><option>Inventory</option></select></div>
+            <div><label>Requested Term</label><select><option>5 years</option><option>7 years</option><option>10 years</option><option>15 years</option></select></div>
           </div>
         </div>
- 
-        <div class="card" style="box-shadow:none;background:#f8fafc;margin-bottom:14px;">
-          <h3 style="margin-top:0;">Additional Guarantors (if applicable)</h3>
-          <div class="grid">
-            <div><label>Additional Guarantor Name</label><input id="guar2Name" type="text" placeholder="Name of additional guarantor"></div>
-            <div><label>Ownership % in Business</label><input id="guar2Ownership" type="number" placeholder="e.g. 20"></div>
-            <div><label>Guaranty Type</label><select id="guar2Type"><option>Unlimited Personal Guaranty</option><option>Limited Guaranty</option><option>N/A — Below 20% threshold</option></select></div>
-            <div><label>Relationship to Borrower</label><select id="guar2Rel"><option>Co-Owner</option><option>Spouse</option><option>Corporate Entity</option><option>Trust (20%+ ownership)</option></select></div>
-          </div>
-        </div>
- 
-        <div class="card" style="box-shadow:none;background:#f8fafc;">
-          <h3 style="margin-top:0;">SBA Guaranty Coverage</h3>
-          <div class="grid">
-            <div><label>SBA Guaranty Percentage</label><select id="sbaGrntPct"><option>85% — Loans ≤ $150,000</option><option>75% — Loans > $150,000</option><option>50% — SBA Express</option></select></div>
-            <div><label>SBA Guaranteed Amount ($)</label><input id="sbaGrntAmt" type="number" placeholder="Loan amount × guaranty %"></div>
-            <div><label>Life Insurance Required</label><select id="sbaLifeIns"><option>Yes — Loans > $350,000 (key person)</option><option>No — Below $350,000 threshold</option><option>Lender discretion</option></select></div>
-            <div><label>Hazard Insurance Required</label><select id="sbaHazardIns"><option>Yes — All collateral assets</option><option>Modified — Loan ≤ $150,000</option><option>Follow lender policy</option></select></div>
-          </div>
-        </div>
-      </section>
+      </div>
 
-
-      <section id="covenants" class="card hidden">
-        <h2>Financial Covenants</h2>
- 
-        <div class="card" style="box-shadow:none;background:#f8fafc;margin-bottom:14px;">
-          <h3 style="margin-top:0;">Maintenance Covenants (tested annually)</h3>
+      <div class="section-panel" id="panel-financials">
+        <div class="section-header">
+          <div class="section-icon teal">📈</div>
+          <div class="section-title"><h2>Financial Information</h2><p>Revenue, income, debt metrics, borrowing base, and debt/equity ratios</p></div>
+        </div>
+        <div class="card">
           <div class="grid">
-            <div><label>Minimum DSCR Required</label><select id="covDSCR"><option>1.25x (SBA standard minimum)</option><option>1.15x (lender discretion)</option><option>1.35x (elevated risk)</option><option>Custom</option></select></div>
-            <div><label>Custom DSCR Threshold</label><input id="covDSCRCustom" type="number" placeholder="e.g. 1.20 — if Custom selected above"></div>
-            <div><label>Minimum Current Ratio</label><select id="covCurrentRatio"><option>1.00x</option><option>1.20x</option><option>1.50x</option><option>Custom</option></select></div>
-            <div><label>Maximum Debt / Equity Ratio</label><select id="covDebtEquity"><option>3.00x</option><option>4.00x</option><option>5.00x</option><option>Custom</option></select></div>
-            <div><label>Minimum Tangible Net Worth ($)</label><input id="covMinTNW" type="number" placeholder="e.g. 100000"></div>
-            <div><label>Maximum Owner Distributions (%)</label><input id="covMaxDist" type="number" placeholder="e.g. 50 — % of net income per year"></div>
+            <div><label>Annual Revenue (Most Recent Year)</label><input id="revenue" type="number" value="950000"><small class="hint">Use most recent fiscal year figures</small></div>
+            <div><label>Net Income</label><input id="income" type="number" value="145000"></div>
+            <div><label>Existing Business Debt</label><input id="debt" type="number" value="80000"></div>
+            <div><label>Average Bank Balance</label><input id="bank" type="number" value="120000"></div>
+            <div><label>Annual Debt Service (Payments)</label><input id="debtService" type="number" value="24000"><small class="hint">Total annual principal + interest payments</small></div>
+            <div><label>Current Liabilities (Due within 1 Year)</label><input id="currentLiabilities" type="number" value="35000"></div>
+          </div>
+          <div class="sub-card">
+            <h3>Borrowing Base Information</h3>
+            <div class="grid">
+              <div><label>A/R Total</label><input id="arTotal" type="number" placeholder="Total accounts receivable"><small class="hint">Gross A/R before eligibility adjustments</small></div>
+              <div><label>Eligible A/R</label><input id="eligibleAR" type="number" placeholder="Eligible A/R"><small class="hint">A/R ≤ 90 days, excluding ineligible accounts</small></div>
+              <div><label>Inventory Value</label><input id="inventoryValue" type="number" placeholder="Total inventory at cost"><small class="hint">Lower of cost or market</small></div>
+              <div><label>Eligible Inventory</label><input id="eligibleInventory" type="number" placeholder="Eligible inventory"><small class="hint">Finished goods, net of reserves</small></div>
+            </div>
+          </div>
+          <div class="sub-card">
+            <h3>Debt / Equity Metrics</h3>
+            <div class="grid-3">
+              <div><label>Total Equity (Net Worth)</label><input id="totalEquity" type="number" placeholder="Owner's equity"><small class="hint">Total assets minus total liabilities</small></div>
+              <div><label>Total Assets</label><input id="totalAssets" type="number" placeholder="Total business assets"><small class="hint">Current + fixed + other assets</small></div>
+              <div><label>Total Liabilities</label><input id="totalLiabilities" type="number" placeholder="Total liabilities"><small class="hint">Current + long-term liabilities</small></div>
+            </div>
+          </div>
+          <button class="btn" onclick="calculateScore()">⚡ Calculate Risk Score</button>
+        </div>
+      </div>
+
+      <div class="section-panel" id="panel-collateral">
+        <div class="section-header">
+          <div class="section-icon orange">🔒</div>
+          <div class="section-title"><h2>Collateral</h2><p>Real estate, equipment, business assets, and personal assets pledged to secure the loan</p></div>
+        </div>
+        <div class="card">
+          <div class="sub-card">
+            <h3>Real Estate</h3>
+            <div class="grid">
+              <div><label>Property Address</label><input id="colREAddress" type="text" placeholder="Address of collateral property"></div>
+              <div><label>Property Type</label><select id="colREType"><option>Owner-Occupied Commercial</option><option>Investment / Rental</option><option>Primary Residence</option><option>Vacant Land</option></select></div>
+              <div><label>Appraised Value ($)</label><input id="colREValue" type="number" placeholder="Most recent appraisal"></div>
+              <div><label>Outstanding Mortgage ($)</label><input id="colREMortgage" type="number" placeholder="Remaining mortgage balance"></div>
+              <div><label>Estimated Net Equity ($)</label><input id="colREEquity" type="number" placeholder="Appraised value minus mortgage"></div>
+              <div><label>Lien Position</label><select id="colRELien"><option>1st Lien</option><option>2nd Lien</option><option>3rd Lien</option></select></div>
+            </div>
+          </div>
+          <div class="sub-card">
+            <h3>Equipment & Machinery</h3>
+            <div class="grid">
+              <div><label>Equipment Description</label><input id="colEquipDesc" type="text" placeholder="Type and description"></div>
+              <div><label>Year / Make / Model</label><input id="colEquipYear" type="text" placeholder="e.g. 2021 Caterpillar 320"></div>
+              <div><label>Forced Liquidation Value ($)</label><input id="colEquipFLV" type="number" placeholder="FLV — value at forced sale"></div>
+              <div><label>Orderly Liquidation Value ($)</label><input id="colEquipOLV" type="number" placeholder="OLV — orderly sale value"></div>
+            </div>
+          </div>
+          <div class="sub-card">
+            <h3>Business Assets (A/R & Inventory)</h3>
+            <div class="grid">
+              <div><label>Eligible A/R Pledged ($)</label><input id="colARPledged" type="number" placeholder="A/R pledged as collateral"></div>
+              <div><label>Advance Rate on A/R (%)</label><input id="colARRate" type="number" value="80" placeholder="Typical: 70–85%"></div>
+              <div><label>Eligible Inventory Pledged ($)</label><input id="colInvPledged" type="number" placeholder="Inventory pledged"></div>
+              <div><label>Advance Rate on Inventory (%)</label><input id="colInvRate" type="number" value="50" placeholder="Typical: 40–60%"></div>
+            </div>
+          </div>
+          <div class="sub-card">
+            <h3>Personal Assets</h3>
+            <div class="grid">
+              <div><label>Personal Real Estate Value ($)</label><input id="colPersonalRE" type="number" placeholder="Market value"></div>
+              <div><label>Personal RE Mortgage ($)</label><input id="colPersonalMtg" type="number" placeholder="Remaining mortgage"></div>
+              <div><label>Other Personal Assets ($)</label><input id="colPersonalOther" type="number" placeholder="Vehicles, savings, investments"></div>
+              <div><label>UCC-1 Filing Required</label><select id="colUCC"><option>Yes — All business assets</option><option>Yes — Specific assets only</option><option>No — Waived per SBA guidelines</option></select></div>
+            </div>
           </div>
         </div>
- 
-        <div class="card" style="box-shadow:none;background:#f8fafc;margin-bottom:14px;">
-          <h3 style="margin-top:0;">Reporting Covenants</h3>
-          <div class="grid">
-            <div><label>Annual Financial Statements</label><select id="covAnnualFS"><option>Required — within 120 days of fiscal year end</option><option>Required — within 90 days</option><option>Waived</option></select></div>
-            <div><label>Annual Tax Returns</label><select id="covTaxReturn"><option>Required — within 30 days of filing</option><option>Required — by April 30 each year</option><option>Waived</option></select></div>
-            <div><label>Quarterly Management Accounts</label><select id="covQuarterly"><option>Required — within 45 days of quarter end</option><option>Not required</option><option>Lender discretion</option></select></div>
-            <div><label>Borrowing Base Certificate</label><select id="covBBC"><option>Monthly — if A/R or inventory pledged</option><option>Quarterly</option><option>Not applicable</option></select></div>
+      </div>
+
+      <div class="section-panel" id="panel-guaranty">
+        <div class="section-header">
+          <div class="section-icon red">🛡️</div>
+          <div class="section-title"><h2>Guaranty</h2><p>Personal guaranty requirements per 13 CFR § 120.160 — required from all owners with 20%+ equity</p></div>
+        </div>
+        <div class="card">
+          <div class="sub-card">
+            <h3>Primary Guarantor</h3>
+            <div class="grid">
+              <div><label>Guarantor Full Name</label><input id="guar1Name" type="text" placeholder="Full legal name"></div>
+              <div><label>Ownership % in Business</label><input id="guar1Ownership" type="number" placeholder="e.g. 100"></div>
+              <div><label>Guaranty Type</label><select id="guar1Type"><option>Unlimited Personal Guaranty</option><option>Limited — Maximum Liability</option><option>Limited — Principal Reduction</option><option>Limited — Percentage</option></select></div>
+              <div><label>Guaranty Amount ($)</label><input id="guar1Amount" type="number" placeholder="For limited guaranty"></div>
+              <div><label>Personal Net Worth ($)</label><input id="guar1NetWorth" type="number" placeholder="Total personal net worth"></div>
+              <div><label>SBA Form 413 Status</label><select id="guar1Form413"><option>Received</option><option>Pending</option><option>Waived — Credit Score ≤ $500k</option></select></div>
+            </div>
+          </div>
+          <div class="sub-card">
+            <h3>Additional Guarantors (if applicable)</h3>
+            <div class="grid">
+              <div><label>Additional Guarantor Name</label><input id="guar2Name" type="text" placeholder="Name of additional guarantor"></div>
+              <div><label>Ownership % in Business</label><input id="guar2Ownership" type="number" placeholder="e.g. 20"></div>
+              <div><label>Guaranty Type</label><select id="guar2Type"><option>Unlimited Personal Guaranty</option><option>Limited Guaranty</option><option>N/A — Below 20% threshold</option></select></div>
+              <div><label>Relationship to Borrower</label><select id="guar2Rel"><option>Co-Owner</option><option>Spouse</option><option>Corporate Entity</option><option>Trust (20%+ ownership)</option></select></div>
+            </div>
+          </div>
+          <div class="sub-card">
+            <h3>SBA Guaranty Coverage</h3>
+            <div class="grid">
+              <div><label>SBA Guaranty Percentage</label><select id="sbaGrntPct"><option>85% — Loans ≤ $150,000</option><option>75% — Loans > $150,000</option><option>50% — SBA Express</option></select></div>
+              <div><label>SBA Guaranteed Amount ($)</label><input id="sbaGrntAmt" type="number" placeholder="Loan amount × guaranty %"></div>
+              <div><label>Life Insurance Required</label><select id="sbaLifeIns"><option>Yes — Loans > $350,000</option><option>No — Below $350,000 threshold</option><option>Lender discretion</option></select></div>
+              <div><label>Hazard Insurance Required</label><select id="sbaHazardIns"><option>Yes — All collateral assets</option><option>Modified — Loan ≤ $150,000</option><option>Follow lender policy</option></select></div>
+            </div>
           </div>
         </div>
- 
-        <div class="card" style="box-shadow:none;background:#f8fafc;">
-          <h3 style="margin-top:0;">Negative Covenants (restrictions on borrower)</h3>
-          <div class="grid">
-            <div><label>Additional Secured Debt</label><select id="covNoDebt"><option>Prohibited without lender consent</option><option>Permitted up to defined threshold</option></select></div>
-            <div><label>Asset Disposals</label><select id="covAssets"><option>Prohibited without lender consent</option><option>Permitted — ordinary course of business only</option></select></div>
-            <div><label>Change of Ownership / Control</label><select id="covOwnership"><option>Prohibited — triggers acceleration</option><option>Permitted with lender approval</option></select></div>
-            <div><label>Additional Liens on Collateral</label><select id="covLiens"><option>Prohibited without lender consent</option><option>Junior liens permitted</option></select></div>
+      </div>
+
+      <div class="section-panel" id="panel-covenants">
+        <div class="section-header">
+          <div class="section-icon indigo">📋</div>
+          <div class="section-title"><h2>Financial Covenants</h2><p>Maintenance, reporting, and negative covenants governing the loan agreement</p></div>
+        </div>
+        <div class="card">
+          <div class="sub-card">
+            <h3>Maintenance Covenants (tested annually)</h3>
+            <div class="grid">
+              <div><label>Minimum DSCR Required</label><select id="covDSCR"><option>1.25x (SBA standard minimum)</option><option>1.15x (lender discretion)</option><option>1.35x (elevated risk)</option><option>Custom</option></select></div>
+              <div><label>Custom DSCR Threshold</label><input id="covDSCRCustom" type="number" placeholder="e.g. 1.20"></div>
+              <div><label>Minimum Current Ratio</label><select id="covCurrentRatio"><option>1.00x</option><option>1.20x</option><option>1.50x</option><option>Custom</option></select></div>
+              <div><label>Maximum Debt / Equity Ratio</label><select id="covDebtEquity"><option>3.00x</option><option>4.00x</option><option>5.00x</option><option>Custom</option></select></div>
+              <div><label>Minimum Tangible Net Worth ($)</label><input id="covMinTNW" type="number" placeholder="e.g. 100000"></div>
+              <div><label>Maximum Owner Distributions (%)</label><input id="covMaxDist" type="number" placeholder="e.g. 50"></div>
+            </div>
+          </div>
+          <div class="sub-card">
+            <h3>Reporting Covenants</h3>
+            <div class="grid">
+              <div><label>Annual Financial Statements</label><select id="covAnnualFS"><option>Required — within 120 days of FY end</option><option>Required — within 90 days</option><option>Waived</option></select></div>
+              <div><label>Annual Tax Returns</label><select id="covTaxReturn"><option>Required — within 30 days of filing</option><option>Required — by April 30 each year</option><option>Waived</option></select></div>
+              <div><label>Quarterly Management Accounts</label><select id="covQuarterly"><option>Required — within 45 days of quarter end</option><option>Not required</option><option>Lender discretion</option></select></div>
+              <div><label>Borrowing Base Certificate</label><select id="covBBC"><option>Monthly — if A/R or inventory pledged</option><option>Quarterly</option><option>Not applicable</option></select></div>
+            </div>
+          </div>
+          <div class="sub-card">
+            <h3>Negative Covenants</h3>
+            <div class="grid">
+              <div><label>Additional Secured Debt</label><select id="covNoDebt"><option>Prohibited without lender consent</option><option>Permitted up to defined threshold</option></select></div>
+              <div><label>Asset Disposals</label><select id="covAssets"><option>Prohibited without lender consent</option><option>Permitted — ordinary course only</option></select></div>
+              <div><label>Change of Ownership / Control</label><select id="covOwnership"><option>Prohibited — triggers acceleration</option><option>Permitted with lender approval</option></select></div>
+              <div><label>Additional Liens on Collateral</label><select id="covLiens"><option>Prohibited without lender consent</option><option>Junior liens permitted</option></select></div>
+            </div>
           </div>
         </div>
-      </section>
+      </div>
 
-      
-      
-      <section id="compliance" class="card hidden">
-        <h2>Compliance & Risk</h2>
-        <ul class="checklist">
-          <li>✅ CIP / KYC identity verification</li>
-          <li>✅ OFAC sanctions screening</li>
-          <li>✅ Beneficial ownership review</li>
-          <li>⚠️ Adverse media screening pending</li>
-          <li>⚠️ Fraud anomaly review pending</li>
-          <li>✅ SBA eligibility questionnaire completed</li>
-        </ul>
-        <div class="card" style="margin-top:18px;box-shadow:none;">
-          <h3 style="margin-top:0;">Credit Authorization</h3>
-          <div class="grid">
-            <div><label>Authorized By</label><input id="authBy" type="text" placeholder="Full name of authorizing officer"></div>
-            <div><label>Authorization Date</label><input id="authDate" type="date"></div>
+      <div class="section-panel" id="panel-compliance">
+        <div class="section-header">
+          <div class="section-icon green">✅</div>
+          <div class="section-title"><h2>Compliance & Risk</h2><p>KYC, OFAC, screening status, credit authorization, and analyst notes</p></div>
+        </div>
+        <div class="card">
+          <ul class="checklist">
+            <li><span class="status-ok">✅</span> CIP / KYC identity verification</li>
+            <li><span class="status-ok">✅</span> OFAC sanctions screening</li>
+            <li><span class="status-ok">✅</span> Beneficial ownership review</li>
+            <li><span class="status-warn">⚠️</span> Adverse media screening pending</li>
+            <li><span class="status-warn">⚠️</span> Fraud anomaly review pending</li>
+            <li><span class="status-ok">✅</span> SBA eligibility questionnaire completed</li>
+          </ul>
+          <div class="sub-card" style="margin-top:20px;">
+            <h3>Credit Authorization</h3>
+            <div class="grid">
+              <div><label>Authorized By</label><input id="authBy" type="text" placeholder="Full name of authorizing officer"></div>
+              <div><label>Authorization Date</label><input id="authDate" type="date"></div>
+            </div>
+          </div>
+          <div class="sub-card">
+            <h3>Compliance Review Notes / Result Analysis</h3>
+            <textarea id="complianceNotes" placeholder="Enter compliance review findings, analyst notes, and result analysis here..."></textarea>
           </div>
         </div>
-        <!-- Result Analysis box -->
-        <div class="card" style="margin-top:14px;box-shadow:none;">
-          <h3 style="margin-top:0;">Compliance Review Notes / Result Analysis</h3>
-          <textarea id="complianceNotes" placeholder="Enter compliance review findings, analyst notes, and result analysis here..."></textarea>
-        </div>
-      </section>
+      </div>
 
-      <section id="documents" class="card hidden">
-        <h2>Document Checklist</h2>
-        <ul class="checklist">
-          <li><input type="checkbox" checked> Government ID</li>
-          <li><input type="checkbox" checked> Business tax returns</li>
-          <li><input type="checkbox"> Personal tax returns</li>
-          <li><input type="checkbox" checked> Bank statements</li>
-          <li><input type="checkbox"> Profit & loss statement</li>
-          <li><input type="checkbox"> Balance sheet</li>
-          <li><input type="checkbox"> Business Plan</li>
-          <li><input type="checkbox"> Business license / formation documents</li>
-          <li><input type="checkbox" id="creditMemoCheck" checked> Credit memo generated from application data</li>
-        </ul>
-
-        <div class="card" style="margin-top:18px; box-shadow:none;">
-          <h3 style="margin-top:0;">Credit Memo Automation</h3>
-          <p style="color:var(--muted); margin-top:0;">No upload needed. The app uses borrower, business, loan, financial, and compliance information to generate a bank-style credit memo.</p>
-          <button class="btn secondary" onclick="showSection('underwriting', document.querySelectorAll('nav button')[7])">Go to Credit Memo Generator</button>
+      <div class="section-panel" id="panel-documents">
+        <div class="section-header">
+          <div class="section-icon orange">📁</div>
+          <div class="section-title"><h2>Document Checklist</h2><p>Required SBA package documents for underwriting review</p></div>
         </div>
-      </section>
-
-      <section id="underwriting" class="card hidden">
-        <h2>Credit Memo Generator</h2>
-        <p style="color:var(--muted);">Generate a credit memo automatically using the borrower profile, business details, loan request, financials, compliance checks, and document status.</p>
-        <div class="row">
-          <button class="btn secondary" onclick="generateCreditMemo()">Generate Credit Memo</button>
-          <button class="btn" onclick="downloadMemo()">Download Memo as Text</button>
-          <button class="btn" onclick="window.print()">Print / Save as PDF</button>
+        <div class="card">
+          <ul class="checklist">
+            <li><input type="checkbox" checked> Government ID</li>
+            <li><input type="checkbox" checked> Business tax returns</li>
+            <li><input type="checkbox"> Personal tax returns</li>
+            <li><input type="checkbox" checked> Bank statements</li>
+            <li><input type="checkbox"> Profit & loss statement</li>
+            <li><input type="checkbox"> Balance sheet</li>
+            <li><input type="checkbox"> Business Plan</li>
+            <li><input type="checkbox"> Business license / formation documents</li>
+            <li><input type="checkbox" checked> Credit memo generated from application data</li>
+          </ul>
+          <div class="sub-card" style="margin-top:20px;">
+            <h3>Credit Memo Automation</h3>
+            <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">No upload needed. The app uses borrower, business, loan, financial, and compliance information to generate a bank-style credit memo.</p>
+            <button class="btn" onclick="showSection('underwriting', document.querySelectorAll('nav button')[10])">⚡ Go to Credit Memo Generator</button>
+          </div>
         </div>
-        <div id="summary" class="summary" style="margin-top:15px;">Click “Generate Credit Memo” to create a demo credit memo.</div>
-      </section>
+      </div>
+
+      <div class="section-panel" id="panel-underwriting">
+        <div class="section-header">
+          <div class="section-icon indigo">⚡</div>
+          <div class="section-title"><h2>Credit Memo Generator</h2><p>Auto-generates a full bank-style credit memo from all entered application data</p></div>
+        </div>
+        <div class="card">
+          <div class="row">
+            <button class="btn dark" onclick="generateCreditMemo()">📄 Generate Credit Memo</button>
+            <button class="btn outline" onclick="downloadMemo()" style="margin-top:16px;">⬇️ Download as Text</button>
+            <button class="btn outline" onclick="window.print()" style="margin-top:16px;">🖨️ Print / Save PDF</button>
+          </div>
+          <div class="memo-output" id="summary">
+            <div class="memo-placeholder">Click "Generate Credit Memo" to create a full bank-style underwriting memo</div>
+          </div>
+        </div>
+      </div>
+
     </main>
   </div>
 
-
-
-  
   <script>
     function showSection(id, btn) {
-      document.querySelectorAll('main section').forEach(s => s.classList.add('hidden'));
-      document.getElementById(id).classList.remove('hidden');
+      document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+      document.getElementById('panel-' + id).classList.add('active');
       document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
     }
- 
+
     function money(n) {
       return Number(n || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
     }
- 
+
     function calculateScore() {
       const revenue  = Number(document.getElementById('revenue').value  || 0);
       const income   = Number(document.getElementById('income').value   || 0);
@@ -522,7 +790,7 @@
       const fico     = Number(document.getElementById('ficoScore').value || 0);
       const bureau   = document.getElementById('creditBureau').value;
       const pullType = document.getElementById('pullType').value;
- 
+
       let score = 50;
       if (revenue > 500000) score += 10;
       if (income  > 100000) score += 12;
@@ -535,7 +803,7 @@
       else if (fico >= 650)            score +=  4;
       else if (fico > 0 && fico < 600) score -= 10;
       score = Math.min(95, Math.max(20, score));
- 
+
       document.getElementById('dashScore').innerText  = score + ' / 100';
       document.getElementById('scoreBar').style.width = score + '%';
       document.getElementById('dashFico').innerText   = fico || 'N/A';
@@ -543,7 +811,7 @@
       alert('Risk score updated to ' + score + ' / 100');
       return score;
     }
- 
+
     function generateCreditMemo() {
       const name         = document.getElementById('name').value;
       const email        = document.getElementById('email').value;
@@ -567,16 +835,13 @@
       const authBy       = document.getElementById('authBy').value;
       const authDate     = document.getElementById('authDate').value;
       const notes        = document.getElementById('complianceNotes').value;
- 
       const arTotal          = Number(document.getElementById('arTotal').value || 0);
       const eligibleAR       = Number(document.getElementById('eligibleAR').value || 0);
       const inventoryValue   = Number(document.getElementById('inventoryValue').value || 0);
       const eligibleInventory= Number(document.getElementById('eligibleInventory').value || 0);
- 
-      const totalEquity     = Number(document.getElementById('totalEquity').value || 0);
-      const totalAssets     = Number(document.getElementById('totalAssets').value || 0);
-      const totalLiabilities= Number(document.getElementById('totalLiabilities').value || 0);
- 
+      const totalEquity      = Number(document.getElementById('totalEquity').value || 0);
+      const totalAssets      = Number(document.getElementById('totalAssets').value || 0);
+      const totalLiabilities = Number(document.getElementById('totalLiabilities').value || 0);
       const colREAddress  = document.getElementById('colREAddress').value;
       const colREValue    = Number(document.getElementById('colREValue').value || 0);
       const colREMortgage = Number(document.getElementById('colREMortgage').value || 0);
@@ -589,62 +854,47 @@
       const colPersonalRE = Number(document.getElementById('colPersonalRE').value || 0);
       const colPersonalMtg= Number(document.getElementById('colPersonalMtg').value || 0);
       const colPersonalOther= Number(document.getElementById('colPersonalOther').value || 0);
- 
-      const guar1Name      = document.getElementById('guar1Name').value;
-      const guar1Type      = document.getElementById('guar1Type').value;
-      const guar1NetWorth  = Number(document.getElementById('guar1NetWorth').value || 0);
-      const sbaGrntPct     = document.getElementById('sbaGrntPct').value;
-      const sbaGrntAmt     = Number(document.getElementById('sbaGrntAmt').value || 0);
- 
-      const covDSCR        = document.getElementById('covDSCR').value;
+      const guar1Name     = document.getElementById('guar1Name').value;
+      const guar1Type     = document.getElementById('guar1Type').value;
+      const guar1NetWorth = Number(document.getElementById('guar1NetWorth').value || 0);
+      const sbaGrntPct    = document.getElementById('sbaGrntPct').value;
+      const sbaGrntAmt    = Number(document.getElementById('sbaGrntAmt').value || 0);
+      const covDSCR       = document.getElementById('covDSCR').value;
       const covCurrentRatio= document.getElementById('covCurrentRatio').value;
-      const covDebtEquity  = document.getElementById('covDebtEquity').value;
-      const covAnnualFS    = document.getElementById('covAnnualFS').value;
-      const covTaxReturn   = document.getElementById('covTaxReturn').value;
-      const covNoDebt      = document.getElementById('covNoDebt').value;
-      const covOwnership   = document.getElementById('covOwnership').value;
- 
+      const covDebtEquity = document.getElementById('covDebtEquity').value;
+      const covAnnualFS   = document.getElementById('covAnnualFS').value;
+      const covTaxReturn  = document.getElementById('covTaxReturn').value;
+      const covNoDebt     = document.getElementById('covNoDebt').value;
+      const covOwnership  = document.getElementById('covOwnership').value;
+
       const score         = calculateScore();
       const debtToIncome  = income > 0 ? (debt / income).toFixed(2) + 'x' : 'N/A';
       const margin        = revenue > 0 ? ((income / revenue) * 100).toFixed(1) + '%' : 'N/A';
       const freeCashFlow  = income - debtService;
       const dscr          = debtService > 0 ? (income / debtService).toFixed(2) + 'x' : 'N/A';
-      const dscrStatus    = debtService > 0 ? ((income / debtService) >= 1.25 ? 'Meets SBA minimum (1.25x)' : 'Below SBA minimum — flag for review') : 'N/A';
+      const dscrStatus    = debtService > 0 ? ((income / debtService) >= 1.25 ? '✅ Meets SBA minimum (1.25x)' : '⚠️ Below SBA minimum — flag for review') : 'N/A';
       const currentRatio  = currentLiab > 0 ? (bank / currentLiab).toFixed(2) + 'x' : 'N/A';
-      const liquidityStatus = currentLiab > 0 ? ((bank / currentLiab) >= 1 ? 'Adequate short-term liquidity' : 'Limited — flag for review') : 'N/A';
- 
-      const debtToEquity   = totalEquity > 0 ? (totalLiabilities / totalEquity).toFixed(2) + 'x' : 'N/A';
-      const debtToAssets   = totalAssets > 0 ? ((totalLiabilities / totalAssets) * 100).toFixed(1) + '%' : 'N/A';
-      const equityRatio    = totalAssets > 0 ? ((totalEquity / totalAssets) * 100).toFixed(1) + '%' : 'N/A';
- 
-      const arBorrowBase  = eligibleAR > 0 ? eligibleAR * 0.80 : 0;
-      const invBorrowBase = eligibleInventory > 0 ? eligibleInventory * 0.50 : 0;
+      const liquidityStatus = currentLiab > 0 ? ((bank / currentLiab) >= 1 ? '✅ Adequate short-term liquidity' : '⚠️ Limited — flag for review') : 'N/A';
+      const debtToEquity  = totalEquity > 0 ? (totalLiabilities / totalEquity).toFixed(2) + 'x' : 'N/A';
+      const debtToAssets  = totalAssets > 0 ? ((totalLiabilities / totalAssets) * 100).toFixed(1) + '%' : 'N/A';
+      const equityRatio   = totalAssets > 0 ? ((totalEquity / totalAssets) * 100).toFixed(1) + '%' : 'N/A';
+      const arBorrowBase  = eligibleAR * 0.80;
+      const invBorrowBase = eligibleInventory * 0.50;
       const totalBorrowBase = arBorrowBase + invBorrowBase;
- 
       const colARValue    = colARPledged * (colARRate / 100);
       const colInvValue   = colInvPledged * (colInvRate / 100);
       const colPersonalREEquity = colPersonalRE - colPersonalMtg;
       const totalCollateral = colREEquity + colARValue + colInvValue + colPersonalREEquity + colPersonalOther;
- 
-      const recommendation = score >= 75
-        ? 'Recommend conditional approval subject to final document validation and compliance clearance.'
-        : score >= 60
-        ? 'Recommend additional underwriting review before approval.'
-        : 'Recommend decline or significant credit enhancement due to elevated risk.';
- 
+      const recommendation = score >= 75 ? 'Recommend conditional approval subject to final document validation and compliance clearance.' : score >= 60 ? 'Recommend additional underwriting review before approval.' : 'Recommend decline or significant credit enhancement due to elevated risk.';
+
       document.getElementById('dashProgram').innerText = program;
       document.getElementById('dashAmount').innerText  = money(amount);
       document.getElementById('dashFico').innerText    = ficoScore || 'N/A';
       document.getElementById('dashBureau').innerText  = creditBureau + ' • ' + pullType;
- 
-      const memoHTML = `
-      <div class="memo-paper" id="memoPaper">
-        <h1 style="text-align:center;text-decoration:underline;">Credit Memo</h1>
-        <table>
-          <tr><th>Application Type</th><th>Date</th><th>Approval Authority</th></tr>
-          <tr><td>New SBA Loan Request</td><td>${new Date().toLocaleDateString()}</td><td>Credit Committee / SBA Lending Officer</td></tr>
-        </table>
- 
+
+      const memoHTML = `<div class="memo-paper" id="memoPaper">
+        <h1>Credit Memo</h1>
+        <table><tr><th>Application Type</th><th>Date</th><th>Approval Authority</th></tr><tr><td>New SBA Loan Request</td><td>${new Date().toLocaleDateString()}</td><td>Credit Committee / SBA Lending Officer</td></tr></table>
         <h2>Overview</h2>
         <table>
           <tr><th>Borrower</th><td>${biz}</td><th>Primary Contact</th><td>${name}</td></tr>
@@ -656,12 +906,9 @@
           <tr><th>Purpose</th><td>${funds}</td><th>Industry</th><td>${industry}</td></tr>
           <tr><th>Years in Business</th><td>${years}</td><th>Demo Risk Score</th><td>${score}/100</td></tr>
           <tr><th>Credit Authorized By</th><td>${authBy || 'N/A'}</td><th>Authorization Date</th><td>${authDate || 'N/A'}</td></tr>
-          <tr><th>KYC Status</th><td>No issue - demo status</td><th>OFAC / Sanctions</th><td>Screening required before approval</td></tr>
         </table>
- 
         <h2>Executive Summary</h2>
         <p>${biz} has requested a ${program} facility in the amount of ${money(amount)} for ${funds.toLowerCase()}. The borrower reports annual revenue of ${money(revenue)}, net income of ${money(income)}, existing business debt of ${money(debt)}, average bank balance of ${money(bank)}, and a demo FICO score of ${ficoScore} from ${creditBureau}. Based on the demo scoring model, the borrower receives a preliminary risk score of ${score}/100.</p>
- 
         <h2>Summary Terms and Conditions</h2>
         <table>
           <tr><th>Facility Type</th><td>${program}</td></tr>
@@ -672,15 +919,13 @@
           <tr><th>SBA Guaranty</th><td>${sbaGrntPct} — Guaranteed amount: ${sbaGrntAmt > 0 ? money(sbaGrntAmt) : 'To be calculated'}</td></tr>
           <tr><th>Conditions</th><td>Tax returns, bank statements, financial statements, KYC/CIP, OFAC screening, beneficial ownership verification, and SBA eligibility review.</td></tr>
         </table>
- 
         <h2>Business & Financial Analysis</h2>
         <p>The borrower operates in the ${industry} sector and has been in business for approximately ${years} year(s). Net profit margin is ${margin}. Debt-to-income ratio is ${debtToIncome}.</p>
         <table>
           <tr><th>Metric</th><th>Value</th><th>Assessment</th></tr>
-          <tr><td>Debt Service Coverage Ratio (DSCR)</td><td>${dscr}</td><td>${dscrStatus}</td></tr>
+          <tr><td>DSCR</td><td>${dscr}</td><td>${dscrStatus}</td></tr>
           <tr><td>Free Cash Flow (Annual)</td><td>${money(freeCashFlow)}</td><td>Net income less annual debt service</td></tr>
         </table>
- 
         <h2>Borrowing Base Analysis</h2>
         <table>
           <tr><th>Item</th><th>Total Value</th><th>Eligible Amount</th><th>Advance Rate</th><th>Borrowing Base</th></tr>
@@ -688,27 +933,24 @@
           <tr><td>Inventory</td><td>${money(inventoryValue)}</td><td>${money(eligibleInventory)}</td><td>50%</td><td>${money(invBorrowBase)}</td></tr>
           <tr><th colspan="4">Total Borrowing Base</th><td><strong>${money(totalBorrowBase)}</strong></td></tr>
         </table>
- 
         <h2>Debt / Equity Metrics</h2>
         <table>
           <tr><th>Metric</th><th>Value</th><th>Assessment</th></tr>
           <tr><td>Total Assets</td><td>${money(totalAssets)}</td><td>Per borrower-reported balance sheet</td></tr>
           <tr><td>Total Liabilities</td><td>${money(totalLiabilities)}</td><td>Per borrower-reported balance sheet</td></tr>
           <tr><td>Total Equity (Net Worth)</td><td>${money(totalEquity)}</td><td>Assets minus liabilities</td></tr>
-          <tr><td>Debt / Equity Ratio</td><td>${debtToEquity}</td><td>${debtToEquity !== 'N/A' && parseFloat(debtToEquity) <= 3 ? 'Within acceptable range (≤ 3.00x)' : debtToEquity !== 'N/A' ? 'Elevated — flag for review (> 3.00x)' : 'N/A'}</td></tr>
-          <tr><td>Debt / Total Assets</td><td>${debtToAssets}</td><td>Leverage ratio — % of assets funded by debt</td></tr>
+          <tr><td>Debt / Equity Ratio</td><td>${debtToEquity}</td><td>${debtToEquity !== 'N/A' && parseFloat(debtToEquity) <= 3 ? '✅ Within range (≤ 3.00x)' : debtToEquity !== 'N/A' ? '⚠️ Elevated — flag for review' : 'N/A'}</td></tr>
+          <tr><td>Debt / Total Assets</td><td>${debtToAssets}</td><td>% of assets funded by debt</td></tr>
           <tr><td>Equity Ratio</td><td>${equityRatio}</td><td>% of assets funded by owner equity</td></tr>
         </table>
- 
         <h2>Liquidity Analysis</h2>
-        <p>The borrower reports an average bank balance of ${money(bank)} against current liabilities of ${money(currentLiab)}, yielding a current ratio of ${currentRatio}. ${liquidityStatus}.</p>
+        <p>Average bank balance of ${money(bank)} against current liabilities of ${money(currentLiab)}, yielding a current ratio of ${currentRatio}. ${liquidityStatus}.</p>
         <table>
           <tr><th>Metric</th><th>Value</th></tr>
           <tr><td>Average Bank Balance</td><td>${money(bank)}</td></tr>
-          <tr><td>Current Liabilities (Due within 1 Year)</td><td>${money(currentLiab)}</td></tr>
+          <tr><td>Current Liabilities</td><td>${money(currentLiab)}</td></tr>
           <tr><td>Current Ratio</td><td>${currentRatio}</td></tr>
         </table>
- 
         <h2>Collateral Summary</h2>
         <table>
           <tr><th>Collateral Type</th><th>Gross Value</th><th>Net / Eligible Value</th></tr>
@@ -719,7 +961,6 @@
           <tr><td>Other Personal Assets</td><td>${money(colPersonalOther)}</td><td>${money(colPersonalOther)}</td></tr>
           <tr><th colspan="2">Total Estimated Collateral Coverage</th><td><strong>${money(totalCollateral)}</strong></td></tr>
         </table>
- 
         <h2>Guaranty</h2>
         <table>
           <tr><th>Item</th><th>Detail</th></tr>
@@ -728,31 +969,25 @@
           <tr><td>SBA Guaranty Coverage</td><td>${sbaGrntPct} — ${sbaGrntAmt > 0 ? money(sbaGrntAmt) : 'To be calculated'}</td></tr>
           <tr><td>Personal Guarantee Basis</td><td>Required per 13 CFR § 120.160 from all owners with 20%+ equity</td></tr>
         </table>
- 
         <h2>Financial Covenants</h2>
         <table>
           <tr><th>Covenant</th><th>Requirement</th></tr>
-          <tr><td>Minimum DSCR</td><td>${covDSCR} — tested annually</td></tr>
-          <tr><td>Minimum Current Ratio</td><td>${covCurrentRatio} — tested annually</td></tr>
-          <tr><td>Maximum Debt / Equity Ratio</td><td>${covDebtEquity} — tested annually</td></tr>
+          <tr><td>Minimum DSCR</td><td>${covDSCR}</td></tr>
+          <tr><td>Minimum Current Ratio</td><td>${covCurrentRatio}</td></tr>
+          <tr><td>Maximum Debt / Equity Ratio</td><td>${covDebtEquity}</td></tr>
           <tr><td>Annual Financial Statements</td><td>${covAnnualFS}</td></tr>
           <tr><td>Annual Tax Returns</td><td>${covTaxReturn}</td></tr>
           <tr><td>Additional Secured Debt</td><td>${covNoDebt}</td></tr>
-          <tr><td>Change of Ownership / Control</td><td>${covOwnership}</td></tr>
+          <tr><td>Change of Ownership</td><td>${covOwnership}</td></tr>
         </table>
- 
-        <h2>Credit Profile</h2>
-        <p>Demo FICO score of ${ficoScore} from ${creditBureau}, pull type: ${pullType}. In production, credit data must be obtained through an approved bureau API with borrower consent.</p>
- 
         <h2>Strengths</h2>
         <ul>
           <li>Complete business and ownership profile provided for initial SBA screening.</li>
           <li>Reported annual revenue of ${money(revenue)} supports further cash-flow analysis.</li>
           <li>Average bank balance of ${money(bank)} may support liquidity, subject to verification.</li>
-          ${totalBorrowBase > 0 ? '<li>Borrowing base of ' + money(totalBorrowBase) + ' provides asset-level support for the requested facility.</li>' : ''}
+          ${totalBorrowBase > 0 ? '<li>Borrowing base of ' + money(totalBorrowBase) + ' provides asset-level support.</li>' : ''}
           ${totalEquity > 0 && parseFloat(debtToEquity) <= 3 ? '<li>Debt/equity ratio of ' + debtToEquity + ' is within acceptable range.</li>' : ''}
         </ul>
- 
         <h2>Weaknesses / Risks and Mitigants</h2>
         <table>
           <tr><th>Risk</th><th>Mitigant / Required Action</th></tr>
@@ -761,9 +996,8 @@
           <tr><td>Compliance review is not final.</td><td>Complete KYC, OFAC, beneficial ownership, fraud, and adverse media checks.</td></tr>
           <tr><td>SBA eligibility is not final.</td><td>Confirm use of proceeds, ownership, business size, and SBA certifications.</td></tr>
           ${totalEquity > 0 && parseFloat(debtToEquity) > 3 ? '<tr><td>Elevated debt/equity ratio (' + debtToEquity + ').</td><td>Require additional equity injection or credit enhancement.</td></tr>' : ''}
-          ${dscr !== 'N/A' && parseFloat(dscr) < 1.25 ? '<tr><td>DSCR below SBA minimum of 1.25x (current: ' + dscr + ').</td><td>Require additional collateral or guarantor support.</td></tr>' : ''}
+          ${dscr !== 'N/A' && parseFloat(dscr) < 1.25 ? '<tr><td>DSCR below SBA minimum (current: ' + dscr + ').</td><td>Require additional collateral or guarantor support.</td></tr>' : ''}
         </table>
- 
         <h2>Compliance Review</h2>
         <table>
           <tr><th>Control</th><th>Status</th></tr>
@@ -775,17 +1009,16 @@
           <tr><td>FCRA / Credit Consent</td><td>Demo only — production requires borrower consent and approved bureau access</td></tr>
           <tr><td>Credit Authorization</td><td>${authBy ? 'Authorized by ' + authBy + ' on ' + authDate : 'Pending authorization'}</td></tr>
         </table>
-        ${notes ? `<h2>Compliance Review Notes / Result Analysis</h2><p>${notes}</p>` : ''}
- 
+        ${notes ? `<h2>Compliance Review Notes</h2><p>${notes}</p>` : ''}
         <h2>Preliminary Recommendation</h2>
         <p><strong>${recommendation}</strong></p>
-        <p>This memo is system-generated for demo purposes and should be reviewed by a credit analyst before any lending decision.</p>
+        <p style="font-size:12px;color:#64748b;">This memo is system-generated for demo purposes and should be reviewed by a credit analyst before any lending decision.</p>
       </div>`;
- 
+
       document.getElementById('summary').innerHTML = memoHTML;
       window.latestMemoText = document.getElementById('memoPaper').innerText;
     }
- 
+
     function downloadMemo() {
       if (!window.latestMemoText) generateCreditMemo();
       const blob = new Blob([window.latestMemoText], { type: 'text/plain' });
@@ -796,6 +1029,6 @@
       URL.revokeObjectURL(link.href);
     }
   </script>
- 
+
 </body>
 </html>
