@@ -33,7 +33,7 @@
       color: var(--text);
       min-height: 100vh;
     }
-
+ 
     /* ── HEADER ── */
     header {
       background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #2563eb 100%);
@@ -70,14 +70,14 @@
       color: rgba(255,255,255,0.9);
       letter-spacing: 0.3px;
     }
-
+ 
     /* ── LAYOUT ── */
     .app-shell {
       display: grid;
       grid-template-columns: var(--nav-w) 1fr;
       min-height: calc(100vh - 72px);
     }
-
+ 
     /* ── SIDEBAR ── */
     nav {
       background: #0f172a;
@@ -123,7 +123,7 @@
     }
     .nav-icon { font-size: 15px; width: 18px; text-align: center; flex-shrink: 0; }
     .nav-divider { height: 1px; background: rgba(255,255,255,0.07); margin: 12px 0; }
-
+ 
     /* ── MAIN CONTENT ── */
     main {
       padding: 28px;
@@ -131,7 +131,7 @@
       flex-direction: column;
       gap: 0;
     }
-
+ 
     /* ── SECTION HEADER ── */
     .section-header {
       display: flex;
@@ -154,7 +154,7 @@
     .section-icon.indigo { background: linear-gradient(135deg, #e0e7ff, #c7d2fe); }
     .section-title h2 { font-size: 20px; font-weight: 700; letter-spacing: -0.3px; }
     .section-title p { font-size: 13px; color: var(--muted); margin-top: 3px; }
-
+ 
     /* ── CARDS ── */
     .card {
       background: var(--card);
@@ -189,11 +189,11 @@
       background: var(--primary);
       border-radius: 99px;
     }
-
+ 
     /* ── GRID ── */
     .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
     .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
-
+ 
     /* ── FORM ELEMENTS ── */
     .field label {
       font-size: 12px;
@@ -229,7 +229,7 @@
     input::placeholder, textarea::placeholder { color: #94a3b8; }
     textarea { min-height: 100px; resize: vertical; }
     small.hint { display: block; margin-top: 5px; font-size: 11px; color: var(--muted); }
-
+ 
     /* ── BUTTONS ── */
     .btn {
       display: inline-flex;
@@ -253,7 +253,7 @@
     .btn.dark { background: linear-gradient(135deg, #0f172a, #1e293b); box-shadow: 0 4px 12px rgba(15,23,42,0.3); }
     .btn.outline { background: white; color: var(--primary); border: 1.5px solid var(--primary); box-shadow: none; }
     .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 16px; }
-
+ 
     /* ── DASHBOARD METRICS ── */
     .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 20px; }
     .metric {
@@ -279,7 +279,7 @@
     .metric-value { font-size: 26px; font-weight: 800; letter-spacing: -0.5px; margin: 6px 0 4px; color: var(--text); }
     .metric-sub { font-size: 12px; color: var(--muted); }
     .metric-icon { position: absolute; top: 18px; right: 18px; font-size: 22px; opacity: 0.15; }
-
+ 
     /* ── SCORE BAR ── */
     .score-track {
       height: 8px;
@@ -295,7 +295,7 @@
       border-radius: 99px;
       transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
     }
-
+ 
     /* ── PILLS ── */
     .pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; padding-top: 18px; border-top: 1px solid var(--border); }
     .pill {
@@ -307,12 +307,12 @@
       font-size: 12px;
       font-weight: 600;
     }
-    .pill.blue { background: #dbeafe; color: #1d4ed8; }
+    .pill.blue { background: #f1f5f9; color: #64748b; }
     .pill.green { background: #d1fae5; color: #065f46; }
-    .pill.yellow { background: #fef3c7; color: #92400e; }
+    .pill.yellow { background: #f1f5f9; color: #64748b; }
     .pill.red { background: #fee2e2; color: #991b1b; }
-    .pill.purple { background: #ede9fe; color: #5b21b6; }
-
+    .pill.purple { background: #f1f5f9; color: #64748b; }
+ 
     /* ── CHECKLIST ── */
     .checklist { list-style: none; padding: 0; }
     .checklist li {
@@ -330,11 +330,11 @@
     }
     .checklist li:hover { background: #f1f5f9; }
     .checklist li input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--primary); flex-shrink: 0; }
-
+ 
     /* ── STATUS BADGES ── */
     .status-ok { color: #059669; }
     .status-warn { color: #d97706; }
-
+ 
     /* ── MEMO OUTPUT ── */
     .hidden { display: none; }
     .memo-output {
@@ -364,11 +364,11 @@
     .memo-paper th { background: #f8fafc; font-weight: 700; color: #374151; }
     .memo-paper ul { padding-left: 18px; }
     .memo-paper ul li { margin: 6px 0; font-size: 13px; }
-
+ 
     /* ── SECTION PANEL ── */
     .section-panel { display: none; }
     .section-panel.active { display: block; }
-
+ 
     /* ── PRINT ── */
     @media print {
       header, nav, .row, .section-header { display: none !important; }
@@ -378,7 +378,7 @@
       #panel-underwriting { display: block !important; }
       .memo-output { background: white; padding: 0; }
     }
-
+ 
     /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
       .app-shell { grid-template-columns: 1fr; }
@@ -394,6 +394,7 @@
   </style>
 </head>
 <body>
+  
 
   <header>
     <div class="header-left">
